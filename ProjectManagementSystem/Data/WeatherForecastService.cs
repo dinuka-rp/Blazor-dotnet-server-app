@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+// TODO: Remove - autogen file
+
 namespace ProjectManagementSystem.Data
 {
     public class WeatherForecastService

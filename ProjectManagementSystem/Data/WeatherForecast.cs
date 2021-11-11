@@ -1,5 +1,7 @@
 using System;
 
+// TODO: Remove - autogen file
+
 namespace ProjectManagementSystem.Data
 {
     public class WeatherForecast

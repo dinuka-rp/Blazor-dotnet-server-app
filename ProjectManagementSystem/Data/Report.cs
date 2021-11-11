@@ -11,5 +11,11 @@ namespace ProjectManagementSystem.Data
 
         public Ticket[] CompletedTickets { get; set; }
 
+        public Report GenerateReport(DateTime startDate , DateTime endDate ) 
+        {
+            // TODO: call DB & return created Report
+            Report report = new Report();
+            return report;
+        }
     }
 }

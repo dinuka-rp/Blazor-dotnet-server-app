@@ -9,5 +9,12 @@ namespace ProjectManagementSystem.Data
     {
         public int ProjectsPerCompany { get; set; }
         public int PeoplePerProject { get; set; }
+
+        public Prediction GeneratePrediction(DateTime date)
+        {
+            // TODO: call DB & return calculate relevant predictions
+            Prediction prediction = new Prediction();
+            return prediction;
+        }
     }
 }

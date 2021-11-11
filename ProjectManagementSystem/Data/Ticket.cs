@@ -26,5 +26,18 @@ namespace ProjectManagementSystem.Data
         
         public TicketStatus Status { get; set; }
 
+
+        // methods with CRUD options in DB
+        /*public Boolean CreateTicket(description : String, assignees : User[], status : TicketStatus)
+        {
+            // TODO: call DB
+            if (err != null)
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }*/
     }
 }

@@ -7,5 +7,8 @@ namespace ProjectManagementSystem.Data
 {
     public class Company
     {
+        public string Name { get; set; }
+        public Project[] ProjectsAssigned { get; set; }
+
     }
 }

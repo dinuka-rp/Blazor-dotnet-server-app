@@ -7,5 +7,7 @@ namespace ProjectManagementSystem.Data
 {
     public class Prediction
     {
+        public int ProjectsPerCompany { get; set; }
+        public int PeoplePerProject { get; set; }
     }
 }

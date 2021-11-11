@@ -7,5 +7,9 @@ namespace ProjectManagementSystem.Data
 {
     public class Report
     {
+        public Project[] CompletedProjects { get; set; }
+
+        public Ticket[] CompletedTickets { get; set; }
+
     }
 }

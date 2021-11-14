@@ -1,9 +1,22 @@
 ﻿@page "/"
-
-    <!-- TODO: alter - autogen file -->
-
-    <h1>Hello, world!</h1>
+<!-- TODO: alter - autogen file -->
+<!--<h1>Hello, world!</h1>
 
     Welcome to your new app.
 
     <SurveyPrompt Title="How is Blazor working for you?" />
+-->
+@using ProjectManagementSystem.Data
+@inject WeatherForecastService ForecastService
+@*change this to ticketsservice*@
+
+<TicketsTable />
+
+@code{
+    private Ticket[] tickets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // tickets = await ForecastService.GetForecastAsync(DateTime.Now);       change this to TicketsService
+    }
+}

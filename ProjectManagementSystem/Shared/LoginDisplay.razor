@@ -2,7 +2,12 @@
     <!-- TODO: Alter - autogen file -->
 
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+        <NavLink class="nav-link" href="">Project Board</NavLink>
+        <!--show Admin Panel button only if an admin user logs in
+            use atcode variable or get authorize role from Auth package thing?
+            -->
+        <NavLink class="nav-link" href="admin">Admin Panel</NavLink>
+        <NavLink class="nav-link" href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</NavLink>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>

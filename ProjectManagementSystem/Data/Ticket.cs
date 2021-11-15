@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectManagementSystem.Data
 {
@@ -18,12 +15,22 @@ namespace ProjectManagementSystem.Data
 
     public class Ticket
     {
+        public Ticket(string id, string description, User[] assignees, TicketStatus status)
+        {
+            Id = id ?? throw new ArgumentNullException(nameof(id));
+            // remove null check for Id - it's set from the system
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Assignees = assignees;
+            // ?? throw new ArgumentNullException(nameof(assignees));
+            Status = status;
+        }
+
         public string Id { get; set; }
 
         public string Description { get; set; }
 
         public User[] Assignees { get; set; }
-        
+
         public TicketStatus Status { get; set; }
 
 

@@ -1,5 +1,35 @@
-﻿<h3>TicketsTable</h3>
+﻿@using ProjectManagementSystem.Data
+
+<h3>Tickets</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Description</th>
+            <th>State</th>
+            <th>Assignee/s</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Tickets)
+        {
+        <tr>
+            <td>@ticket.Id</td>
+            <td>@ticket.Description</td>
+            <td>@ticket.Status</td>
+            <td>@ticket.Assignees[0].Name</td>
+        @* TODO: display multiple assignees here? *@
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+@* add ticket button *@
+
 
 @code {
-
+    [Parameter]
+    public Ticket[] Tickets { get; set; }
 }

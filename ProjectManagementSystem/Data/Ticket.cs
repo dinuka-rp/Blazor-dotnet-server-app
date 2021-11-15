@@ -25,6 +25,7 @@ namespace ProjectManagementSystem.Data
             Status = status;
         }
 
+        // TODO: Change all variable types to String!!!
         public string Id { get; set; }
 
         public string Description { get; set; }

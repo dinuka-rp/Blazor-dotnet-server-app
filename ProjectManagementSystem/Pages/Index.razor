@@ -7,11 +7,9 @@
     <SurveyPrompt Title="How is Blazor working for you?" />
 -->
 @using ProjectManagementSystem.Data
-@inject WeatherForecastService ForecastService
-@*change this to TicketService*@
+@inject TicketService TicketService
 
-
-@* try to load tickets only if logged in (authorized) *@
+@* TODO: try to load tickets only if logged in (authorized) *@
 @if (tickets == null)
 {
     <p><em>Loading Tickets in Project Board</em></p>
@@ -33,6 +31,6 @@ else
     protected override async Task OnInitializedAsync()
     {
 
-        // tickets = await ForecastService.GetForecastAsync(DateTime.Now);       change this to TicketsService
+        // tickets = await TicketService.GetTicketsAsync();
     }
 }

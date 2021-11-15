@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementSystem.Data
 {
-    public class TicketsService
+    public class TicketService
     {
+        //public Task<Ticket[]> GetTicketsAsync()
+        //{
+
+        //}
     }
 }

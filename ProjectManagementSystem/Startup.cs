@@ -41,6 +41,7 @@ namespace ProjectManagementSystem
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<TicketService>();     // TODO: check if this should be Singleton?
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

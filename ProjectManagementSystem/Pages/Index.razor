@@ -1,36 +1,8 @@
 ﻿@page "/"
 <!-- TODO: alter - autogen file -->
-<!--<h1>Hello, world!</h1>
+<h1>Hello, world!</h1>
 
-    Welcome to your new app.
+Welcome to your new app.
 
-    <SurveyPrompt Title="How is Blazor working for you?" />
--->
-@using ProjectManagementSystem.Data
-@inject TicketService TicketService
+<SurveyPrompt Title="How is Blazor working for you?" />
 
-@* TODO: try to load tickets only if logged in (authorized) *@
-@if (tickets == null)
-{
-    <p><em>Loading Tickets in Project Board</em></p>
-}
-else
-{
-    <TicketsTable Tickets="tickets" />
-}
-
-@code{
-    // *test data
-    private static User user = new User("Sampath");
-    private static User[] assignees = { user, user };
-    // remove this initialization - should be called from the TicketService (DB)
-    private static Ticket ticket = new Ticket("1", "Random description", assignees, TicketStatus.ToDo);
-
-    private Ticket[] tickets = { ticket, ticket };
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        // tickets = await TicketService.GetTicketsAsync();
-    }
-}

@@ -6,14 +6,15 @@
 
 @* check input binding from last tutorial *@
 
-<div class="card card-body m-3">
+<div class="card card-body m-md-2">
+    @* TODO: keep vertical-space between divs *@
     <div>
-        <span>*Ticket Description</span>
-        <input type="text" @bind-value="description" @bind-value:event="oninput" placeholder="Enter Ticket Description" />
+        <label for="description-input">* Ticket Description</label>
+        <input type="text" id="description-input" class="form-control"  @bind-value="description" @bind-value:event="oninput" placeholder="Enter Ticket Description" />
     </div>
     <div>
-        <span>*Ticket State</span>
-        <select class="custom-select" @bind-value="ticketState" @bind-value:event="oninput">
+        <label for="state-select">* Ticket State</label>
+        <select class="custom-select" id="state-select" @bind-value="ticketState" @bind-value:event="oninput">
             <option selected value="@TicketStatus.Open">Open</option>
             <option value="@TicketStatus.InProgress">In Progress</option>
             <option value="@TicketStatus.Done">Done</option>
@@ -25,22 +26,35 @@
         @*<div>@ticketState</div>*@
     </div>
     <div>
-        <span>Assigned User/s</span>
+        <label for="user-select">Assigned User/s</label>
         @* check which input is ideal here *@
-        <input type="search" @bind-value="userIdToAdd" @bind-value:event="oninput" placeholder="Choose User" />
+        <input type="search" id="user-select" class="form-control" @bind-value="userIdToAdd" @bind-value:event="oninput" @onkeydown="@SearchUsers" placeholder="Choose User" />
     </div>
+    <div>
+        @* load users onenter in above search *@
+    </div>
+
+    @* Button to Cancel - go back to project board *@
+    @* Button to Create Ticket - create ticket and go back to project board? *@
 </div>
 
 @code {
     private String description;
     private String ticketState = "Open";
     private String userIdToAdd;
-    private List<String> assginedUserIds = new List<String>() { };
+    private List<String> assginedUserIds = new List<String>() {};
+    private List<User> searchedUsers = new List<User>() {};
 
 
     private void AssignUser()
     {
         assginedUserIds.Add(userIdToAdd);
         userIdToAdd = "";
+    }
+
+    private void SearchUsers()
+    {
+        //call user model with filter by name
+        //searchedUsers = 
     }
 }

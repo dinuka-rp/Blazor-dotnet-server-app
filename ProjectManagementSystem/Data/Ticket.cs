@@ -15,7 +15,7 @@ namespace ProjectManagementSystem.Data
 
     public class Ticket
     {
-        public Ticket(string id, string description, User[] assignees, TicketStatus status)
+        public Ticket(String id, String description, User[] assignees, TicketStatus status)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             // remove null check for Id - it's set from the system
@@ -26,9 +26,9 @@ namespace ProjectManagementSystem.Data
         }
 
         // TODO: Change all variable types to String!!!
-        public string Id { get; set; }
+        public String Id { get; set; }
 
-        public string Description { get; set; }
+        public String Description { get; set; }
 
         public User[] Assignees { get; set; }
 

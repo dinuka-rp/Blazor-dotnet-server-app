@@ -7,11 +7,11 @@ namespace ProjectManagementSystem.Data
 {
     public class Project
     {
-        public string ProjectCode { get; set; }
+        public String ProjectCode { get; set; }
 
-        public string Name { get; set; }
+        public String Name { get; set; }
 
-        public string Description { get; set; }
+        public String Description { get; set; }
 
         public User[] UsersAssigned { get; set; }
 

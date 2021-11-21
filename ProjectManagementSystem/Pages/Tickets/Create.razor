@@ -39,9 +39,10 @@
         @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
     </div>
 
-    @* TODO: fix the onclick to trigger Cancel here *@
-    <button class="btn btn-outline-secondary" onclick="">Cancel</button>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <NavLink class="btn btn-outline-secondary" href="project-board">
+        <span aria-hidden="true">Cancel</span>
+    </NavLink>
+    <button type="submit" class="btn btn-primary">Create Ticket</button>
 </EditForm>
 
 @code {
@@ -64,9 +65,4 @@
         //await employeeService.InsertEmployeeAsync(obj);
         Navigation.NavigateTo("project-board");
     }
-    void Cancel()
-    {
-        Navigation.NavigateTo("project-board");
-    }
-
 }

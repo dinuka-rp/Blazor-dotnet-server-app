@@ -14,15 +14,17 @@ namespace ProjectManagementSystem.Data
     }
 
     // Hack: check how to customize User properly with User Roles
-    public class User: IdentityUser
+    public class User
     {
+        [Required]
+        public String Id { get; set; }
+
         [Required]
         public String Name { get; set; }
 
         public String Username { get; set; }
 
-        [Required]
-        public UserRoleEnum UserRole { get; set; }      // TODO: Add this to Identity Server
+//        public UserRoleEnum UserRole { get; set; }      // TODO: Add this to Identity Server
 
         public List<Project> ProjectsAssignedTo { get; set; }       // HACK: keep this separated from Identity Server? - not required there
         public List<Ticket> TicketsAssignedTo { get; set; }

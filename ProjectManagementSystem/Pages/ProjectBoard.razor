@@ -1,7 +1,11 @@
 ﻿@page "/project-board"
 
+@attribute [Authorize]
+@using Microsoft.AspNetCore.Authorization
 @using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Controllers
 @inject TicketService TicketService
+
 @* TODO: try to load tickets only if logged in (authorized) *@
 
 @if (tickets == null)
@@ -12,7 +16,6 @@ else
 {
     <TicketsTable Tickets="tickets" />
 
-
     @* add ticket button *@
     <p>
         <a class="btn btn-primary" href="/tickets/create"><span class="oi oi-plus" aria-hidden="true">Create Ticket</span></a>
@@ -22,9 +25,10 @@ else
 @code{
     List<Ticket> tickets;
 
-    //protected override async Task OnInitializedAsync()
-    //{
+    protected override async Task OnInitializedAsync()
+    {
 
-    //    // tickets = await TicketService.GetTicketsAsync();
-    //}
+        TicketController TicketController = new TicketController(TicketService);
+        tickets = await Task.Run(() => TicketController.GetAllTicketsAsync());
+    }
 }

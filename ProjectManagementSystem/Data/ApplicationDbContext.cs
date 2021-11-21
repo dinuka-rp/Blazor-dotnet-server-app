@@ -14,5 +14,7 @@ namespace ProjectManagementSystem.Data
             : base(options)
         {
         }
+
+        public DbSet<Ticket> Tickets { get; set; }
     }
 }

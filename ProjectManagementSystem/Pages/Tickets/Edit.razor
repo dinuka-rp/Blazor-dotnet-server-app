@@ -1,0 +1,12 @@
+﻿@page "/tickets/edit/{Id:guid}"
+
+@attribute [Authorize]
+@inject NavigationManager Navigation
+@using ProjectManagementSystem.Data
+
+<h3>Edit Ticket</h3>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+}

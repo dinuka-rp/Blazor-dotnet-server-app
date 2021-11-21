@@ -1,0 +1,40 @@
+﻿@page "/tickets/details/{Id:guid}"
+
+@attribute [Authorize]
+@inject NavigationManager Navigation
+@using ProjectManagementSystem.Data
+
+<h3>Ticket Details</h3>
+
+<h4>Ticket Description</h4>
+<p>@ticket.Description</p>
+
+<h4>Ticket Status</h4>
+<p>@ticket.Status</p>
+
+<h4>Assigned User</h4>
+<p>@ticket.UserAssigned</p>
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    public Ticket ticket { get; set; }
+
+    // Similar to Delete
+    protected override void OnInitialized()
+    // any logic/ code needs to go in methods
+    {
+        base.OnInitialized();
+
+        // TODO: call Controller - ask DB for details using Id
+        //if (App.Todos.ContainsKey(Id))
+        //{
+        //    todo = App.Todos[Id];
+        //}
+        //else
+        //{
+        //    Console.WriteLine("Id does not exist.");
+        //}
+    }
+}

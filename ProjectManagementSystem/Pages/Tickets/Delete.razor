@@ -1,0 +1,49 @@
+﻿@page "/tickets/delete/{Id:guid}"
+
+@attribute [Authorize]
+@inject NavigationManager Navigation
+@using ProjectManagementSystem.Data
+
+<h3>Are you sure you want to delete this Ticket?</h3>
+
+@* TODO: Display Ticket details *@
+<h4>Ticket Description</h4>
+<p>@ticket.Description</p>
+
+<h4>Ticket Status</h4>
+<p>@ticket.Status</p>
+
+<h4>Assigned User</h4>
+<p>@ticket.UserAssigned</p>
+
+<button class="btn btn-danger" @onclick="DeleteTicket">Delete</button>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    public Ticket ticket { get; set; }
+
+    // Similar in Read
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        // Call Controller to get Ticket details using Ticket Id
+        //ticket =
+        if (ticket != null)
+        {
+
+        }
+        else
+        {
+            Console.WriteLine($"Ticket with Id: {Id} does not exist.");
+        }
+    }
+
+    private void DeleteTicket()
+    {
+        // TODO: Call Controller to DeleteTicket using ticketId
+        Navigation.NavigateTo("/project-board");        // redirect to project-board page
+    }
+}

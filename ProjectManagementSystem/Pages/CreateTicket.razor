@@ -4,8 +4,6 @@
 
 <h3>Create Ticket</h3>
 
-@* check input binding from last tutorial *@
-
 <div class="card card-body m-md-2">
     @* TODO: keep vertical-space between divs *@
     <div>
@@ -27,20 +25,23 @@
     </div>
     <div>
         <label for="user-select">Assigned User/s</label>
-        @* check which input is ideal here *@
-        <input type="search" id="user-select" class="form-control" @bind-value="userIdToAdd" @bind-value:event="oninput" @onkeydown="@SearchUsers" placeholder="Choose User" />
+        <input type="search" id="user-select" class="form-control"
+               @bind-value="userSearchInput" @bind-value:event="oninput"
+               @onkeydown="@SearchUsers" placeholder="Choose User" />
     </div>
     <div>
         @* load users onenter in above search *@
+        @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
     </div>
 
-    @* Button to Cancel - go back to project board *@
-    @* Button to Create Ticket - create ticket and go back to project board? *@
+    @* Button Secondary to Cancel - go back to project board *@
+    @* Button Primary to Create Ticket - create ticket and go back to project board? *@
 </div>
 
 @code {
     private String description;
     private String ticketState = "Open";
+    private String userSearchInput;
     private String userIdToAdd;
     private List<String> assginedUserIds = new List<String>() {};
     private List<User> searchedUsers = new List<User>() {};
@@ -54,6 +55,7 @@
 
     private void SearchUsers()
     {
+        //params - userSearchInput
         //call user model with filter by name
         //searchedUsers = 
     }

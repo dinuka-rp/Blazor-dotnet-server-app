@@ -3,7 +3,6 @@
 @using ProjectManagementSystem.Data
 @inject TicketService TicketService
 
-
 @* TODO: try to load tickets only if logged in (authorized) *@
 
 @if (tickets == null)
@@ -16,17 +15,11 @@ else
 }
 
 @code{
-    // *test data
-    private static User user = new User("Sampath");
-    private static User[] assignees = { user, user };
-    // remove this initialization - should be called from the TicketService (DB)
-    private static Ticket ticket = new Ticket("1", "Random description Random description Random description Random description Random description Random description  Random description Random description Random description", assignees, TicketStatus.ToDo);
+    List<Ticket> tickets;
 
-    private Ticket[] tickets = { ticket, ticket };
+    //protected override async Task OnInitializedAsync()
+    //{
 
-    protected override async Task OnInitializedAsync()
-    {
-
-        // tickets = await TicketService.GetTicketsAsync();
-    }
+    //    // tickets = await TicketService.GetTicketsAsync();
+    //}
 }

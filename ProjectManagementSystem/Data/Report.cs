@@ -7,9 +7,11 @@ namespace ProjectManagementSystem.Data
 {
     public class Report
     {
-        public Project[] CompletedProjects { get; set; }
+        public List<Project> CompletedProjects { get; set; }
 
-        public Ticket[] CompletedTickets { get; set; }
+        public List<Ticket> CompletedTickets { get; set; }
+
+        // TODO: move this into ReportController
 
         public Report GenerateReport(DateTime startDate , DateTime endDate ) 
         {

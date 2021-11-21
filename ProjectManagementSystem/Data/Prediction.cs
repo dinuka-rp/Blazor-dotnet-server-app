@@ -10,9 +10,10 @@ namespace ProjectManagementSystem.Data
         public int ProjectsPerCompany { get; set; }
         public int PeoplePerProject { get; set; }
 
+        // TODO: move this into PredictionController
         public Prediction GeneratePrediction(DateTime date)
         {
-            // TODO: call DB & return calculate relevant predictions
+            // TODO: call Service -> DB & return calculate relevant predictions
             Prediction prediction = new Prediction();
             return prediction;
         }

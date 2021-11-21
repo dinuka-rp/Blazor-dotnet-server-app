@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+// reference: https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key
 
 namespace ProjectManagementSystem.Data
 {
@@ -15,24 +19,15 @@ namespace ProjectManagementSystem.Data
 
     public class Ticket
     {
-        public Ticket(String id, String description, User[] assignees, TicketStatus status)
-        {
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            // remove null check for Id - it's set from the system
-            Description = description ?? throw new ArgumentNullException(nameof(description));
-            Assignees = assignees;
-            // ?? throw new ArgumentNullException(nameof(assignees));
-            Status = status;
-        }
+        [Key]
+        public Guid Id { get; set; }
 
-        // TODO: Change all variable types to String!!!
-        public String Id { get; set; }
-
+        [Required]
         public String Description { get; set; }
 
-        public User[] Assignees { get; set; }
-
         public TicketStatus Status { get; set; }
+
+        public User UserAssigned { get; set; }
 
 
         // methods with CRUD options in DB

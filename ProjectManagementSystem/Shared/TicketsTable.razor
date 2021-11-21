@@ -23,7 +23,7 @@
             <td>@ticket.Id</td>
             <td>@ticket.Description</td>
             <td>@ticket.Status</td>
-            <td>@ticket.Assignees[0].Name</td>
+            <td>@ticket.UserAssigned</td>
         @* TODO: display multiple assignees here? *@
         </tr>
         }
@@ -36,5 +36,5 @@
 
 @code {
     [Parameter]
-    public Ticket[] Tickets { get; set; }
+    public List<Ticket> Tickets { get; set; }
 }

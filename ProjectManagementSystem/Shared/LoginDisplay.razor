@@ -1,12 +1,19 @@
 ﻿<AuthorizeView>
-    <!-- TODO: Alter - autogen file -->
-
     <Authorized>
         <NavLink class="nav-link" href="project-board">Project Board</NavLink>
-        <!--show Admin Panel button only if an admin user logs in
-            use atcode variable or get authorize role from Auth package thing?
-            -->
+
+    </Authorized>
+</AuthorizeView>
+
+<!--show Admin Panel button only if an Admin user logs in -->
+<AuthorizeView Roles="Admin">
+    <Authorized>
         <NavLink class="nav-link" href="admin">Admin Panel</NavLink>
+    </Authorized>
+</AuthorizeView>
+
+<AuthorizeView>
+    <Authorized>
         <NavLink class="nav-link" href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</NavLink>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>

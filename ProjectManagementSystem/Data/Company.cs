@@ -9,10 +9,10 @@ namespace ProjectManagementSystem.Data
     public class Company
     {
         [Key]
-        public Guid Id { get; set; }
+        public Int16 Id { get; set; }
         
         [Required]
         public String Name { get; set; }
-        public List<Project> ProjectsAssigned { get; set; }
+        public List<Project> Projects { get; set; }
     }
 }

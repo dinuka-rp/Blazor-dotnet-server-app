@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementSystem.Data
 {
+    // Check if it's necessary to add this to the DB, looks like a DTO
     public class Report
     {
         public List<Project> CompletedProjects { get; set; }

@@ -28,6 +28,9 @@ namespace ProjectManagementSystem.Data
         [Required]
         public TicketStatus Status { get; set; }
 
-        public User UserAssigned { get; set; }
+        public List<ApplicationUser> Users { get; set; }
+
+        public Int16 ProjectId { get; set; }
+        public Project Project { get; set; }
     }
 }

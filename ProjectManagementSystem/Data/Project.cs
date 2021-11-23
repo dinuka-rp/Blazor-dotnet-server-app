@@ -18,6 +18,9 @@ namespace ProjectManagementSystem.Data
 
         public String Description { get; set; }
 
-        public List<User> UsersAssigned { get; set; }
+        public String CompanyId { get; set; }
+        public Company Company { get; set; }
+        public List<ApplicationUser> Users { get; set; }
+        public List<Ticket> Tickets { get; set; }
     }
 }

@@ -13,21 +13,20 @@ namespace ProjectManagementSystem.Data
         Admin,
     }
 
-    public class User
+    public class ApplicationUser : IdentityUser
     {
         // user ID from AspNetUser table.
-        [Key]
-        public String OwnerID { get; set; }
+        //[Key]
+        //public String OwnerID { get; set; }
 
         [Required]
         public String FirstName { get; set; }
         public String LastName { get; set; }
 
-        // Hack: check how to customize User properly with User Roles
         // public UserRoleEnum UserRole { get; set; }      // TODO: Add this to Identity Server from Registration - allow Admins to Edit
 
         // HACK: keep this separated from Identity Server? - not required there
-        public List<Project> ProjectsAssignedTo { get; set; } 
-        public List<Ticket> TicketsAssignedTo { get; set; }
+        public List<Project> Projects { get; set; } 
+        public List<Ticket> Tickets { get; set; }
     }
 }

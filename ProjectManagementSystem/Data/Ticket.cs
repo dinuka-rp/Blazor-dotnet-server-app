@@ -20,27 +20,14 @@ namespace ProjectManagementSystem.Data
     public class Ticket
     {
         [Key]
-        public Guid Id { get; set; }
+        public Int64 Id { get; set; }
 
         [Required]
         public String Description { get; set; }
 
+        [Required]
         public TicketStatus Status { get; set; }
 
         public User UserAssigned { get; set; }
-
-
-        // methods with CRUD options in DB
-        /*public Boolean CreateTicket(description : String, assignees : User[], status : TicketStatus)
-        {
-            // TODO: call DB
-            if (err != null)
-            {
-                return false;
-            }
-            else {
-                return true;
-            }
-        }*/
     }
 }

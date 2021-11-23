@@ -1,20 +1,24 @@
 ﻿@inherits LayoutComponentBase
     <!-- TODO: Alter - autogen file -->
 
-    <div class="page">
-        @* TODO: show this side-navbar only in the Admin Panel *@
-        <div class="sidebar">
-            <NavMenu />
+<div class="page">
+    @*show this side-navbar only in the Admin Panel *@
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <div class="main">
+        <div class="top-row px-4 auth">
+            <LoginDisplay />
+            @*<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>*@
         </div>
 
-        <div class="main">
-            <div class="top-row px-4 auth">
-                <LoginDisplay />
-                @*<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>*@
-            </div>
-
-            <div class="content px-4">
-                @Body
-            </div>
+        <div class="content px-4">
+            @Body
         </div>
     </div>
+</div>

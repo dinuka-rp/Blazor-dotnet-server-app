@@ -19,8 +19,9 @@ namespace ProjectManagementSystem.Data
         //[Key]
         //public String OwnerID { get; set; }
 
-        [Required]
+        [Required][PersonalData]
         public String FirstName { get; set; }
+        [PersonalData]
         public String LastName { get; set; }
 
         // public UserRoleEnum UserRole { get; set; }      // TODO: Add this to Identity Server from Registration - allow Admins to Edit

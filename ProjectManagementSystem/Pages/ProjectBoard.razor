@@ -3,7 +3,6 @@
 @attribute [Authorize(Roles = "Admin, Developer")]
 @using Microsoft.AspNetCore.Authorization
 @using ProjectManagementSystem.Data
-@using ProjectManagementSystem.Controllers
 
 @inject TicketService TicketService
 @* the page will redirect to login, if not logged in - try to load tickets only if logged in (authorized) *@
@@ -27,7 +26,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        TicketController ticketController = new TicketController(TicketService);
-        tickets = await Task.Run(() => ticketController.GetAllTicketsAsync());
+        tickets = await Task.Run(() => TicketService.GetAllTicketsAsync());
     }
 }

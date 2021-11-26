@@ -15,10 +15,6 @@ namespace ProjectManagementSystem.Data
 
     public class ApplicationUser : IdentityUser
     {
-        // user ID from AspNetUser table.
-        //[Key]
-        //public String OwnerID { get; set; }
-
         [Required][PersonalData]
         public String FirstName { get; set; }
         [PersonalData]
@@ -26,7 +22,6 @@ namespace ProjectManagementSystem.Data
 
         // public UserRoleEnum UserRole { get; set; }      // TODO: Add this to Identity Server from Registration - allow Admins to Edit
 
-        // HACK: keep this separated from Identity Server? - not required there
         public List<Project> Projects { get; set; } 
         public List<Ticket> Tickets { get; set; }
     }

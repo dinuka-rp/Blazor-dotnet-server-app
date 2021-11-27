@@ -1,4 +1,4 @@
-﻿@page "/admin/users"
+﻿@page "/users"
 
 @attribute [Authorize(Roles = "Admin")]
 @using Microsoft.AspNetCore.Authorization
@@ -10,7 +10,7 @@
 
 @if (users == null)
 {
-    <p><em>Loading Tickets in Project Board</em></p>
+    <p><em>Loading Users</em></p>
 }
 else
 {
@@ -19,8 +19,9 @@ else
     <UsersTable Users="users" />
 
     @* TODO: Reposition button *@
+    // TODO: check if an admin is allowed to create users without registering?
     <p>
-        <a class="btn btn-primary" href="/tickets/create"><span class="oi oi-plus" aria-hidden="true">Create Ticket</span></a>
+        <a class="btn btn-primary" href="/users/create"><span class="oi oi-plus" aria-hidden="true">Create User</span></a>
     </p>
 }
 

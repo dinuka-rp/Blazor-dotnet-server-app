@@ -45,6 +45,7 @@ namespace ProjectManagementSystem
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<TicketService>();
             services.AddScoped<UserService>();
+            services.AddScoped<CompanyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

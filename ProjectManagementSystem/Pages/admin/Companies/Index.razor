@@ -1,0 +1,36 @@
+﻿@page "/companies"
+
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+
+@inject CompanyService CompanyService
+
+
+@if (companies == null)
+{
+    <p><em>Loading Companies</em></p>
+}
+else
+{
+    <h3>Users</h3>
+
+    <CompaniesTable Companies="companies" />
+
+    @* TODO: Reposition button *@
+    <p>
+        <a class="btn btn-primary" href="/companies/create"><span class="oi oi-plus" aria-hidden="true">Create Company</span></a>
+    </p>
+}
+
+@* display all available users in the system - allow to change user role (redirect to edit screen for now) *@
+
+@code {
+    List<Company> companies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
+    }
+}

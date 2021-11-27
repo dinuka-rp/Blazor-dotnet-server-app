@@ -1,5 +1,7 @@
 ﻿@using ProjectManagementSystem.Data
 
+@inject NavigationManager Navigation
+
 <div class="table-responsive">
     <table class="table table-hover">
         <thead class="thead-light">
@@ -7,36 +9,29 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Username</th>
-                <th>User Role</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Users)
+            @foreach (var company in Companies)
             {
                 <tr>
                     <td>
-                        <a href="/users/@user.Id">@user.Id</a>
+                        @* TODO: remove link styling from all tables with links *@
+                        <a href="/companies/@company.Id">@company.Id</a>
                     </td>
                     <td>
-                       @user.FirstName @user.LastName
+                        <a href="/companies/@company.Id">
+                            @company.Name
+                        </a>
                     </td>
-                    <td>
-                    <a href="/users/@user.Id">@user.UserName</a>
-                    </td>
-                    <td>
-                        @* TODO: think of a way to query this from the DB - using JOIN *@
-                        @*@user.UserRole*@
-                    </td>
-
 
                     <td>
                         @* TODO: style add padding *@
-                        <a class="" href="users/edit/@user.Id">
+                        <a class="" href="companies/edit/@company.Id">
                             <span class="oi oi-pencil" aria-hidden="true"></span>
                         </a>
-                        <a class="" href="users/delete/@user.Id">
+                        <a class="" href="companies/delete/@company.Id">
                             <span class="oi oi-trash" aria-hidden="true"></span>
                         </a>
                     </td>
@@ -49,5 +44,5 @@
 
 @code {
     [Parameter]
-    public List<ApplicationUser> Users { get; set; }
+    public List<Company> Companies { get; set; }
 }

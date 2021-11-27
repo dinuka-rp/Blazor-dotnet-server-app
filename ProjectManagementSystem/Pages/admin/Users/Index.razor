@@ -1,0 +1,21 @@
+﻿@page "/admin/users"
+
+@attribute [Authorize(Roles = "Admin, Developer")]
+@using Microsoft.AspNetCore.Authorization
+@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+
+@inject UserService UserService
+
+<h3>Admin - Users Index</h3>
+
+@* display all available users in the system - allow to change user role (redirect to edit screen for now) *@
+
+@code {
+    List<ApplicationUser> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Task.Run(() => UserService.GetAllTicketsAsync());
+    }
+}

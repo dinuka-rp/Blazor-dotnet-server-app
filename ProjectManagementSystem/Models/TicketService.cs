@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ProjectManagementSystem.Data;
+// Use Linq here to assign tickets to users? better to have a separate AssignService because many assigns are there
 
-// Use Linq here to assign tickets to users here?
-
-namespace ProjectManagementSystem.Data
+namespace ProjectManagementSystem.Models
 {
     public class TicketService
     {
@@ -29,14 +29,15 @@ namespace ProjectManagementSystem.Data
         #endregion
 
         #region Get List of Tickets - with pagination
-        public async Task<List<Ticket>> GetAllTicketsWithPaginationAsync()
-        {
-            return await _applicationDbContext.Tickets.ToListAsync();
-        }
+        //public async Task<List<Ticket>> GetAllTicketsWithPaginationAsync()
+        //{
+        //    // TODO: add pagination
+        //    return await _applicationDbContext.Tickets.ToListAsync();
+        //}
         #endregion
 
         #region Insert Ticket
-        public async Task<bool> InsertEmployeeAsync(Ticket ticket)
+        public async Task<bool> InsertTicketAsync(Ticket ticket)
         {
             await _applicationDbContext.Tickets.AddAsync(ticket);
             await _applicationDbContext.SaveChangesAsync();
@@ -45,7 +46,7 @@ namespace ProjectManagementSystem.Data
         #endregion
 
         #region Get Ticket by Id
-        public async Task<Ticket> GetEmployeeAsync(int Id)
+        public async Task<Ticket> GetTicketAsync(int Id)
         {
             Ticket employee = await _applicationDbContext.Tickets.FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return employee;
@@ -53,7 +54,7 @@ namespace ProjectManagementSystem.Data
         #endregion
 
         #region Update Ticket
-        public async Task<bool> UpdateEmployeeAsync(Ticket ticket)
+        public async Task<bool> UpdateTicketAsync(Ticket ticket)
         {
             _applicationDbContext.Tickets.Update(ticket);
             await _applicationDbContext.SaveChangesAsync();
@@ -62,7 +63,7 @@ namespace ProjectManagementSystem.Data
         #endregion
 
         #region Delete Ticket
-        public async Task<bool> DeleteEmployeeAsync(Ticket ticket)
+        public async Task<bool> DeleteTicketAsync(Ticket ticket)
         {
             _applicationDbContext.Remove(ticket);
             await _applicationDbContext.SaveChangesAsync();

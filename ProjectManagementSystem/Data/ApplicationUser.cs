@@ -12,15 +12,16 @@ namespace ProjectManagementSystem.Data
         Developer,
         Admin,
     }
+    //UserRole { get; set; }      // TODO: allow Admins to Edit this from Users view - by default, no user-role will be given
+    // change this directly in the database?
 
     public class ApplicationUser : IdentityUser
     {
+        // TODO: Add string character limits for data in all places
         [Required][PersonalData]
         public String FirstName { get; set; }
         [PersonalData]
         public String LastName { get; set; }
-
-        // public UserRoleEnum UserRole { get; set; }      // TODO: Add this to Identity Server from Registration - allow Admins to Edit
 
         public List<Project> Projects { get; set; } 
         public List<Ticket> Tickets { get; set; }

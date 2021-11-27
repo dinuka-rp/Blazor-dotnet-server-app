@@ -4,8 +4,12 @@
 @inject NavigationManager Navigation
 @using ProjectManagementSystem.Data
 
-<h3>Ticket Index</h3>
+<h3>@*Tickets Will be displayed in the Project-Board*@</h3>
 
 @code {
-
+    // redirect to ProjectBoard
+    protected override async Task OnInitializedAsync()
+    {
+        Navigation.NavigateTo("/project-board");
+    }
 }

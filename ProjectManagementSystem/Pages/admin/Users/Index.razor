@@ -1,13 +1,28 @@
 ﻿@page "/admin/users"
 
-@attribute [Authorize(Roles = "Admin, Developer")]
+@attribute [Authorize(Roles = "Admin")]
 @using Microsoft.AspNetCore.Authorization
 @using ProjectManagementSystem.Data
 @using ProjectManagementSystem.Models
 
 @inject UserService UserService
 
-<h3>Admin - Users Index</h3>
+
+@if (users == null)
+{
+    <p><em>Loading Tickets in Project Board</em></p>
+}
+else
+{
+    <h3>Users</h3>
+
+    <UsersTable Users="users" />
+
+    @* TODO: Reposition button *@
+    <p>
+        <a class="btn btn-primary" href="/tickets/create"><span class="oi oi-plus" aria-hidden="true">Create Ticket</span></a>
+    </p>
+}
 
 @* display all available users in the system - allow to change user role (redirect to edit screen for now) *@
 
@@ -16,6 +31,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        users = await Task.Run(() => UserService.GetAllTicketsAsync());
+        users = await Task.Run(() => UserService.GetAllUsersAsync());
     }
 }

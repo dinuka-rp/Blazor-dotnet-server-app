@@ -14,10 +14,25 @@ namespace ProjectManagementSystem.Models
         #endregion
 
         #region Constructor
-        public TicketService(ApplicationDbContext applicationDbContext)
+        public UserService(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
+        #endregion
+
+        #region Get List of Users
+        public async Task<List<ApplicationUser>> GetAllUsersAsync()
+        {
+            return await _applicationDbContext.Users.ToListAsync();
+        }
+        #endregion
+
+        #region Get List of Users - with pagination
+        //public async Task<List<Ticket>> GetAllTicketsWithPaginationAsync()
+        //{
+        //    // TODO: add pagination
+        //    return await _applicationDbContext.Tickets.ToListAsync();
+        //}
         #endregion
     }
 }

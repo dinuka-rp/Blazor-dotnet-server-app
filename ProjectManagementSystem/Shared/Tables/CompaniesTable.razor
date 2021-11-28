@@ -7,33 +7,28 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Action</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var company in Companies)
             {
-                <tr>
-                    <td>
-                        @* TODO: remove link styling from all tables with links *@
-                        <a href="/companies/@company.Id">@company.Id</a>
-                    </td>
-                    <td>
-                        <a href="/companies/@company.Id">
-                            @company.Name
-                        </a>
-                    </td>
-
-                    <td>
-                        @* TODO: style add padding *@
-                        <a class="" href="companies/edit/@company.Id">
-                            <span class="oi oi-pencil" aria-hidden="true"></span>
-                        </a>
-                        <a class="" href="companies/delete/@company.Id">
-                            <span class="oi oi-trash" aria-hidden="true"></span>
-                        </a>
-                    </td>
-                </tr>
+            <tr>
+                <td>@company.Id</td>
+                <td>@company.Name</td>
+                <td>
+                    @* TODO: style add padding *@
+                    <a class="" href="companies/edit/@company.Id">
+                        <span class="oi oi-pencil" aria-hidden="true"></span>
+                    </a>
+                    <a class="" href="companies/details/@company.Id">
+                        <span class="oi oi-document" aria-hidden="true"></span>
+                    </a>
+                    <a class="" href="companies/delete/@company.Id">
+                        <span class="oi oi-trash" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

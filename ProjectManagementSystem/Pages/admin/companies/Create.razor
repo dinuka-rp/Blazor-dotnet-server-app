@@ -1,0 +1,39 @@
+﻿@page "/companies/create"
+
+@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
+@inject CompanyService CompanyService
+
+<h3>Create Company</h3>
+
+<EditForm Model="company" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @* this will validate the input against the fields mentioned in the model *@
+
+    <div class="form-group">
+        <label for="description-input" class="control-label">* Company Name</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@company.Name"></InputText>
+        <ValidationMessage For="@(()=>company.Name)" />
+    </div>
+
+    <div>
+        @* load projects onenter in above search *@
+        @*@bind-value="projectIdToAdd" @bind-value:event="oninput"*@
+    </div>
+
+    <NavLink class="btn btn-outline-secondary" href="companies">
+        <span aria-hidden="true">Cancel</span>
+    </NavLink>
+
+    <button type="submit" class="btn btn-primary">Create Company</button>
+</EditForm>
+
+@code {
+    private Company company { get; set; } = new Company();
+
+    protected async void HandleValidSubmit()
+    {
+        await CompanyService.InsertCompanyAsync(company);
+        Navigation.NavigateTo("companies");
+    }
+}

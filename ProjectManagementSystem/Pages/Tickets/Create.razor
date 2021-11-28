@@ -2,6 +2,7 @@
 
 @attribute [Authorize]
 @inject NavigationManager Navigation
+@inject TicketService TicketService
 
 <h3>Create Ticket</h3>
 
@@ -11,12 +12,12 @@
 
     <div class="form-group">
         <label for="description-input" class="control-label">* Ticket Description</label>
-        <InputText id="description-input" class="form-control" @bind-Value="@ticket.Description" @bind-Value:event="oninput"></InputText>
+        <InputText id="description-input" class="form-control" @bind-Value="@ticket.Description"></InputText>
         <ValidationMessage For="@(()=>ticket.Description)" />
     </div>
     <div class="form-group">
         <label for="state-select" class="control-label">* Ticket State</label>
-        <InputSelect id="state-select" class="custom-select" @bind-Value="@ticket.Status" @bind-Value:event="oninput">
+        <InputSelect id="state-select" class="custom-select" @bind-Value="@ticket.Status">
             <option selected value="@TicketStatus.Open">Open</option>
             <option value="@TicketStatus.InProgress">In Progress</option>
             <option value="@TicketStatus.Done">Done</option>
@@ -56,12 +57,12 @@
     {
         //params - userSearchInput
         //call user model with filter by name
-        //searchedUsers = 
+        //searchedUsers =
     }
 
     protected async void HandleValidSubmit()
     {
-        //await employeeService.InsertEmployeeAsync(obj);
+        await TicketService.InsertTicketAsync(ticket);
         Navigation.NavigateTo("project-board");
     }
 }

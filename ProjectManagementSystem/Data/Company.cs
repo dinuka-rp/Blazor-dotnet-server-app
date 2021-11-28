@@ -14,6 +14,7 @@ namespace ProjectManagementSystem.Data
         [Required]
         [StringLength(25)]
         public String Name { get; set; }
+
         public List<Project> Projects { get; set; }
     }
 }

@@ -19,8 +19,11 @@ namespace ProjectManagementSystem.Data
     {
         // TODO: Add string character limits for data in all places
         [Required][PersonalData]
+        [StringLength(15)]
         public String FirstName { get; set; }
+
         [PersonalData]
+        [StringLength(25)]
         public String LastName { get; set; }
 
         public List<Project> Projects { get; set; } 

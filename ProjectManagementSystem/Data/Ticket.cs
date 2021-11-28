@@ -23,14 +23,13 @@ namespace ProjectManagementSystem.Data
         public Guid Id { get; set; }
 
         [Required]
+        [StringLength(50)]
         public String Description { get; set; }
 
         [Required]
         public TicketStatus Status { get; set; }
 
         public List<ApplicationUser> Users { get; set; }
-
-        public Int16 ProjectId { get; set; }
         public Project Project { get; set; }
     }
 }

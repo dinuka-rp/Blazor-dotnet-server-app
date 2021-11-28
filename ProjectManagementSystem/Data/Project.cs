@@ -12,10 +12,13 @@ namespace ProjectManagementSystem.Data
         public Guid Id { get; set; }
 
         [Required]
-        public String ProjectCode { get; set; }
+        [StringLength(10)]
+        public String Code { get; set; }
 
+        [StringLength(30)]
         public String Name { get; set; }
 
+        [StringLength(50)]
         public String Description { get; set; }
 
         public Company Company { get; set; }

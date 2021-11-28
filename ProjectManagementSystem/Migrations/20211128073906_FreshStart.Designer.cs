@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagementSystem.Data;
 
-namespace ProjectManagementSystem.Data.Migrations
+namespace ProjectManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211124035528_Project")]
-    partial class Project
+    [Migration("20211128073906_FreshStart")]
+    partial class FreshStart
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,8 @@ namespace ProjectManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ApplicationUserProject", b =>
                 {
-                    b.Property<short>("ProjectsId")
-                        .HasColumnType("smallint");
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
@@ -38,8 +38,8 @@ namespace ProjectManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ApplicationUserTicket", b =>
                 {
-                    b.Property<long>("TicketsId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("TicketsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
@@ -207,10 +207,12 @@ namespace ProjectManagementSystem.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -260,60 +262,62 @@ namespace ProjectManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ProjectManagementSystem.Data.Company", b =>
                 {
-                    b.Property<short>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Company");
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Data.Project", b =>
                 {
-                    b.Property<short>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<short?>("CompanyId")
-                        .HasColumnType("smallint");
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Data.Ticket", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<short>("ProjectId")
-                        .HasColumnType("smallint");
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -419,9 +423,7 @@ namespace ProjectManagementSystem.Data.Migrations
                 {
                     b.HasOne("ProjectManagementSystem.Data.Project", "Project")
                         .WithMany("Tickets")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("Project");
                 });

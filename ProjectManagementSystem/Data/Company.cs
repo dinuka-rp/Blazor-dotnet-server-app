@@ -12,6 +12,7 @@ namespace ProjectManagementSystem.Data
         public Guid Id { get; set; }
         
         [Required]
+        [StringLength(25)]
         public String Name { get; set; }
         public List<Project> Projects { get; set; }
     }

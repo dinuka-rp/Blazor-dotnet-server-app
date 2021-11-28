@@ -1,4 +1,4 @@
-﻿@page "/projects/details/{Id}"
+﻿@page "/projects/details/{Id:guid}"
 
 @attribute [Authorize]
 @inject NavigationManager Navigation
@@ -18,7 +18,7 @@
         Project Code
     </dt>
     <dd class="col-sm-10">
-        @project.ProjectCode
+        @project.Code
     </dd>
     <dt class="col-sm-2">
         Project Name
@@ -54,7 +54,7 @@
 
 @code {
     [Parameter]
-    public Int16 Id { get; set; }
+    public Guid Id { get; set; }
     public Project project { get; set; }
 
     protected override async Task OnInitializedAsync()

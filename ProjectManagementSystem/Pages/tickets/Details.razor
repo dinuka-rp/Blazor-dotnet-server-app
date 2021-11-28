@@ -10,7 +10,7 @@
 
 @if (ticket == null)
 {
-    <p><em>Loading Ticket Details</em></p>
+    <p><em>@displayMessage</em></p>
 }
 else
 {
@@ -53,6 +53,8 @@ else
     public Guid Id { get; set; }
     public Ticket ticket { get; set; }
 
+    public String displayMessage = "Loading Ticket Details";
+
     // Similar to Delete
     protected override async Task OnInitializedAsync()
     // any logic/ code needs to go in methods
@@ -60,5 +62,9 @@ else
         base.OnInitialized();
 
         ticket = await Task.Run(() => TicketService.GetTicketAsync(Id));
+        if (ticket == null)
+        {
+            displayMessage = "Ticket with Id: " + Id + " Not Found";
+        }
     }
 }

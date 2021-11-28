@@ -2,64 +2,81 @@
 
 @attribute [Authorize]
 @inject NavigationManager Navigation
+@inject TicketService TicketService
 
 <h3>Edit Ticket</h3>
 
-<EditForm Model="ticket" OnValidSubmit="@UpdateTicket">
-    <DataAnnotationsValidator />
-    @* this will validate the input against the fields mentioned in the model *@
+<hr />
 
-    <div class="form-group">
-        <label for="description-input" class="control-label">* Ticket Description</label>
-        <InputText id="description-input" class="form-control" @bind-Value="@ticket.Description" @bind-Value:event="oninput"></InputText>
-        <ValidationMessage For="@(()=>ticket.Description)" />
-    </div>
-    <div class="form-group">
-        <label for="state-select" class="control-label">* Ticket State</label>
-        <InputSelect id="state-select" class="custom-select" @bind-Value="@ticket.Status" @bind-Value:event="oninput">
-            <option value="@TicketStatus.Open">Open</option>
-            <option value="@TicketStatus.InProgress">In Progress</option>
-            <option value="@TicketStatus.Done">Done</option>
-            <option value="@TicketStatus.ToDo">To Do</option>
-            <option value="@TicketStatus.UnderReview">Under Review</option>
-            <option value="@TicketStatus.Approved">Approved</option>
-            <option value="@TicketStatus.Cancelled">Cancelled</option>
-        </InputSelect>
-        <ValidationMessage For="@(()=>ticket.Status)" />
-    </div>
-    @* Think about a good way to display this \/ *@
-    @*<div>
-            <label for="user-select">Assigned User/s</label>
-            <input type="search" id="user-select" class="form-control"
-                   @bind-value="userSearchInput" @bind-value:event="oninput"
-                   @onkeydown="@SearchUsers" placeholder="Choose User" />
-        </div>*@
-    <div>
-        @* load users onenter in above search *@
-        @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
-    </div>
+@if (ticket == null)
+{
+    <p><em>@displayMessage</em></p>
+}
+else
+{
+    <EditForm Model="ticket" OnValidSubmit="@UpdateTicket">
+        <DataAnnotationsValidator />
+        @* this will validate the input against the fields mentioned in the model *@
 
-    <NavLink class="btn btn-outline-secondary" href="project-board">
-        <span aria-hidden="true">Cancel</span>
-    </NavLink>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+        <div class="form-group">
+            <label for="description-input" class="control-label">* Ticket Description</label>
+            <InputText id="description-input" class="form-control" @bind-Value="@ticket.Description" @bind-Value:event="oninput"></InputText>
+            <ValidationMessage For="@(() => ticket.Description)" />
+        </div>
+        <div class="form-group">
+            <label for="state-select" class="control-label">* Ticket State</label>
+            <InputSelect id="state-select" class="custom-select" @bind-Value="@ticket.Status" @bind-Value:event="oninput">
+                <option value="@TicketStatus.Open">Open</option>
+                <option value="@TicketStatus.InProgress">In Progress</option>
+                <option value="@TicketStatus.Done">Done</option>
+                <option value="@TicketStatus.ToDo">To Do</option>
+                <option value="@TicketStatus.UnderReview">Under Review</option>
+                <option value="@TicketStatus.Approved">Approved</option>
+                <option value="@TicketStatus.Cancelled">Cancelled</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => ticket.Status)" />
+        </div>
+        @* Think about a good way to display this \/ *@
+        @*<div>
+                <label for="user-select">Assigned User/s</label>
+                <input type="search" id="user-select" class="form-control"
+                       @bind-value="userSearchInput" @bind-value:event="oninput"
+                       @onkeydown="@SearchUsers" placeholder="Choose User" />
+            </div>*@
+        <div>
+            @* load users onenter in above search *@
+            @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
+        </div>
 
+        <NavLink class="btn btn-outline-secondary" href="project-board">
+            <span aria-hidden="true">Cancel</span>
+        </NavLink>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
 
 @code {
     [Parameter]
     public Guid Id { get; set; }
 
     private Ticket ticket { get; set; }
+    public String displayMessage = "Loading Ticket Details";
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    ticket = await Task.Run(() => ticketController.GetTicketAsync(Convert.ToInt32(Id)));
-    //}
-
-    private void UpdateTicket()
+    protected override async Task OnInitializedAsync()
+    // any logic/ code needs to go in methods
     {
-        //await employeeService.UpdateEmployeeAsync(obj);
+        base.OnInitialized();
+
+        ticket = await Task.Run(() => TicketService.GetTicketAsync(Id));
+        if (ticket == null)
+        {
+            displayMessage = "Ticket with Id: " + Id + " Not Found";
+        }
+    }
+
+    private async Task UpdateTicket()
+    {
+        await TicketService.UpdateTicketAsync(ticket);
         Navigation.NavigateTo("project-board");
     }
 }

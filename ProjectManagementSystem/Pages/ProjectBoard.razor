@@ -4,7 +4,10 @@
 @inject TicketService TicketService
 @* the page will redirect to login, if not logged in - try to load tickets only if logged in (authorized) *@
 
-@if (tickets == null)
+<h4>Project Board</h4>
+<hr />
+
+@if (tickets == null || tickets.Count == 0)
 {
     <p><em>Loading Tickets in Project Board</em></p>
 }
@@ -13,20 +16,25 @@ else
     <h3>Tickets</h3>
 
     <TicketsTable Tickets="tickets" />
-
-    @* TODO: Reposition button *@
-    <p>
-        <a class="btn btn-primary" href="/tickets/create"><span class="oi oi-plus" aria-hidden="true"></span> Create Ticket</a>
-    </p>
 }
+@* TODO: Reposition button *@
+<p>
+    <a class="btn btn-primary" href="/tickets/create"><span class="oi oi-plus" aria-hidden="true"></span> Create Ticket</a>
+</p>
+
 
 @code{
     List<Ticket> tickets;
+    public String displayMessage = "Loading Tickets";
 
     protected override async Task OnInitializedAsync()
     {
         // TODO: Design Change? Only show tickets from Projects that the user has been assigned to
 
         tickets = await Task.Run(() => TicketService.GetAllTicketsAsync());
+        if (tickets.Count == 0)
+        {
+            displayMessage = "No Tickets Found";
+        }
     }
 }

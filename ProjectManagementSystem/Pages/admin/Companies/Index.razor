@@ -3,27 +3,33 @@
 @attribute [Authorize(Roles = "Admin")]
 @inject CompanyService CompanyService
 
-@if (companies == null)
+<h3>Users</h3>
+<hr />
+
+@if (companies == null || companies.Count == 0)
 {
-    <p><em>Loading Companies</em></p>
+    <p><em>@displayMessage</em></p>
 }
 else
 {
-    <h3>Users</h3>
-
     <CompaniesTable Companies="companies" />
-
-    @* TODO: Reposition button *@
-    <p>
-        <a class="btn btn-primary" href="/companies/create"><span class="oi oi-plus" aria-hidden="true"></span> Create Company</a>
-    </p>
 }
+
+@* TODO: Reposition button *@
+<p>
+    <a class="btn btn-primary" href="/companies/create"><span class="oi oi-plus" aria-hidden="true"></span> Create Company</a>
+</p>
 
 @code {
     List<Company> companies;
+    public String displayMessage = "Loading Companies";
 
     protected override async Task OnInitializedAsync()
     {
         companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
+        if (companies.Count == 0)
+        {
+            displayMessage = "No Companies Found";
+        }
     }
 }

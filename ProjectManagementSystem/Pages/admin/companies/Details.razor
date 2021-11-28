@@ -9,7 +9,7 @@
 <hr />
 @if (company == null)
 {
-    <p><em>Loading Company Details</em></p>
+    <p><em>@displayMessage</em></p>
 }
 else
 {
@@ -48,15 +48,22 @@ else
         }
     </dl>
 }
+
 @code {
     [Parameter]
     public Guid Id { get; set; }
+
     public Company company { get; set; }
+    public String displayMessage = "Loading Company Details";
 
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
 
         company = await Task.Run(() => CompanyService.GetCompanyAsync(Id));
+        if (company == null)
+        {
+            displayMessage = "Company with Id: " + Id + " Not Found";
+        }
     }
 }

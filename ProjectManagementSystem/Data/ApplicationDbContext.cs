@@ -18,5 +18,7 @@ namespace ProjectManagementSystem.Data
         // naming convention shifts from normal SQL (table names in singular -> plural form) to support limitations in EF
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Project> Projects { get; set; }
+
     }
 }

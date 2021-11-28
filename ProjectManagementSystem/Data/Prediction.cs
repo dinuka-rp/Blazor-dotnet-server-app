@@ -7,8 +7,8 @@ namespace ProjectManagementSystem.Data
 {
     public class Prediction
     {
-        public int ProjectsPerCompany { get; set; }
-        public int PeoplePerProject { get; set; }
+        public Int32 ProjectsPerCompany { get; set; }
+        public Int32 PeoplePerProject { get; set; }
 
         // TODO: move this into PredictionController
         public Prediction GeneratePrediction(DateTime date)

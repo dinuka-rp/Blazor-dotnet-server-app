@@ -1,12 +1,7 @@
 ﻿@page "/users"
 
 @attribute [Authorize(Roles = "Admin")]
-@using Microsoft.AspNetCore.Authorization
-@using ProjectManagementSystem.Data
-@using ProjectManagementSystem.Models
-
 @inject UserService UserService
-
 
 @if (users == null)
 {
@@ -21,7 +16,7 @@ else
     @* TODO: Reposition button *@
     // TODO: check if an admin is allowed to create users without registering?
     <p>
-        <a class="btn btn-primary" href="/users/create"><span class="oi oi-plus" aria-hidden="true">Create User</span></a>
+        <a class="btn btn-primary" href="/users/create"><span class="oi oi-plus" aria-hidden="true"> Create User</span></a>
     </p>
 }
 

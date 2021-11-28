@@ -9,13 +9,16 @@ namespace ProjectManagementSystem.Data
     public class Project
     {
         [Key]
-        public Int16 Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public String ProjectCode { get; set; }
+        [StringLength(10)]
+        public String Code { get; set; }
 
+        [StringLength(30)]
         public String Name { get; set; }
 
+        [StringLength(50)]
         public String Description { get; set; }
 
         public Company Company { get; set; }

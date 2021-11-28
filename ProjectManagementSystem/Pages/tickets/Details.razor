@@ -1,0 +1,48 @@
+﻿@page "/tickets/details/{Id:guid}"
+
+@attribute [Authorize]
+@inject NavigationManager Navigation
+@inject TicketService TicketService
+
+<h3>Ticket Details</h3>
+
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        Ticket Description
+    </dt>
+    <dd class="col-sm-10">
+        @ticket.Description
+    </dd>
+    <dt class="col-sm-2">
+        Ticket Status
+
+    </dt>
+    <dd class="col-sm-10">@ticket.Status</dd>
+
+    <dt class="col-sm-2">
+        Assigned Users
+    </dt>
+    @foreach (var user in ticket.Users)
+    {
+        <dd class="col-sm-10">
+            @user.FirstName
+        </dd>
+    }
+
+</dl>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    public Ticket ticket { get; set; }
+
+    // Similar to Delete
+    protected override async Task OnInitializedAsync()
+    // any logic/ code needs to go in methods
+    {
+        base.OnInitialized();
+
+        ticket = await Task.Run(() => TicketService.GetTicketAsync(Id));
+    }
+}

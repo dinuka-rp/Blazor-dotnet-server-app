@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagementSystem.Data;
 
 namespace ProjectManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211127150730_Projects")]
+    partial class Projects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,8 +23,8 @@ namespace ProjectManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ApplicationUserProject", b =>
                 {
-                    b.Property<int>("ProjectsId")
-                        .HasColumnType("int");
+                    b.Property<short>("ProjectsId")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
@@ -274,9 +276,9 @@ namespace ProjectManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ProjectManagementSystem.Data.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("smallint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<short?>("CompanyId")
@@ -313,15 +315,12 @@ namespace ProjectManagementSystem.Data.Migrations
                     b.Property<short>("ProjectId")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("ProjectId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Tickets");
                 });
@@ -420,7 +419,9 @@ namespace ProjectManagementSystem.Data.Migrations
                 {
                     b.HasOne("ProjectManagementSystem.Data.Project", "Project")
                         .WithMany("Tickets")
-                        .HasForeignKey("ProjectId1");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Project");
                 });

@@ -46,10 +46,10 @@ namespace ProjectManagementSystem.Models
         #endregion
 
         #region Get Ticket by Id
-        public async Task<Ticket> GetTicketAsync(int Id)
+        public async Task<Ticket> GetTicketAsync(Guid Id)
         {
-            Ticket employee = await _applicationDbContext.Tickets.FirstOrDefaultAsync(c => c.Id.Equals(Id));
-            return employee;
+            Ticket ticket = await _applicationDbContext.Tickets.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            return ticket;
         }
         #endregion
 

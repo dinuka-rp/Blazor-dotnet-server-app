@@ -9,7 +9,7 @@ namespace ProjectManagementSystem.Data
     public class Company
     {
         [Key]
-        public Int16 Id { get; set; }
+        public Guid Id { get; set; }
         
         [Required]
         public String Name { get; set; }

@@ -1,4 +1,4 @@
-﻿@page "/tickets"
+﻿@*@page "/tickets"*@
 
 @attribute [Authorize]
 @inject NavigationManager Navigation
@@ -8,7 +8,7 @@
 
 @code {
     // redirect to ProjectBoard
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Navigation.NavigateTo("/project-board");
     }

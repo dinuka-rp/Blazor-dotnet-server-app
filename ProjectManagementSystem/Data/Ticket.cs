@@ -20,7 +20,7 @@ namespace ProjectManagementSystem.Data
     public class Ticket
     {
         [Key]
-        public Int64 Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public String Description { get; set; }

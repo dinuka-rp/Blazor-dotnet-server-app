@@ -1,6 +1,6 @@
 ﻿@page "/project-board"
 
-@attribute [Authorize(Roles = "Admin, Developer")]
+@attribute [Authorize]  
 @inject TicketService TicketService
 @* the page will redirect to login, if not logged in - try to load tickets only if logged in (authorized) *@
 

@@ -1,6 +1,6 @@
 ﻿@page "/tickets/edit/{Id:guid}"
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin, Developer")]
 @inject NavigationManager Navigation
 @inject TicketService TicketService
 

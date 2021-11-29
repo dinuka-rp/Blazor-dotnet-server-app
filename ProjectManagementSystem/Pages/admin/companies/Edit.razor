@@ -1,8 +1,41 @@
 ﻿@page "/companies/edit/{Id:guid}"
 
 @attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
+@inject CompanyService CompanyService
 
 <h3>Edit Company</h3>
+
+@if (company == null)
+{
+    <p><em>@displayMessage</em></p>
+}
+else
+{
+<EditForm Model="company" OnValidSubmit="@UpdateCompany">
+    <DataAnnotationsValidator />
+    @* this will validate the input against the fields mentioned in the model *@
+
+    <div class="form-group">
+        <label for="description-input" class="control-label">* Company Name</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@company.Name"></InputText>
+        <ValidationMessage For="@(()=>company.Name)" />
+    </div>
+
+    <div>
+        @* TODO: load projects onenter in above search *@
+        @*@bind-value="projectIdToAdd" @bind-value:event="oninput"*@
+
+        @*TODO: load already assigned projects with the option to delete*@
+    </div>
+
+    <NavLink class="btn btn-outline-secondary" href="companies">
+        <span aria-hidden="true">Cancel</span>
+    </NavLink>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</EditForm>
+}
 
 @code {
     [Parameter]
@@ -11,4 +44,20 @@
     public Company company { get; set; }
     public String displayMessage = "Loading Company Details";
 
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+
+        company = await Task.Run(() => CompanyService.GetCompanyAsync(Id));
+        if (company == null)
+        {
+            displayMessage = "Company with Id: " + Id + " Not Found";
+        }
+    }
+
+    private async Task UpdateCompany()
+    {
+        await CompanyService.UpdateCompanyAsync(company);
+        Navigation.NavigateTo("companies");
+    }
 }

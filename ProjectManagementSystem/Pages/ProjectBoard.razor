@@ -4,12 +4,13 @@
 @inject TicketService TicketService
 @* the page will redirect to login, if not logged in - try to load tickets only if logged in (authorized) *@
 
+@* TODO: have a breakcrumb? *@
 <h4>Project Board</h4>
 <hr />
 
 @if (tickets == null || tickets.Count == 0)
 {
-    <p><em>Loading Tickets in Project Board</em></p>
+    <p><em>@displayMessage</em></p>
 }
 else
 {

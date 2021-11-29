@@ -3,13 +3,15 @@
 @attribute [Authorize(Roles = "Admin")]
 @inject UserService UserService
 
-@if (users == null)
+<h3>Users</h3>
+<hr />
+
+@if (users == null || users.Count == 0)
 {
-    <p><em>Loading Users</em></p>
+    <p><em>@displayMessage</em></p>
 }
 else
 {
-    <h3>Users</h3>
 
     <UsersTable Users="users" />
 
@@ -24,9 +26,14 @@ else
 
 @code {
     List<ApplicationUser> users;
+    public String displayMessage = "Loading Users";
 
     protected override async Task OnInitializedAsync()
     {
         users = await Task.Run(() => UserService.GetAllUsersAsync());
+        if (users.Count == 0)
+        {
+            displayMessage = "No Users Found";
+        }
     }
 }

@@ -1,5 +1,41 @@
-﻿<h3>ProjectsTable</h3>
+﻿<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            @* TODO: add table sort *@
+            <tr>
+                <th style="width:30%">Id</th>
+                <th>Code</th>
+                <th>Name</th>
+                @* show description, company assigned to, assigned users in details *@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Projects)
+            {
+                <tr>
+                    <td>@project.Id</td>
+                    <td>@project.Code</td>
+                    <td>@project.Name</td>
+                    <td>
+                        @* TODO: style add padding *@
+                        <a class="" href="projects/edit/@project.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>
+                        </a>
+                        <a class="" href="projects/details/@project.Id">
+                            <span class="oi oi-document" aria-hidden="true"></span>
+                        </a>
+                        <a class="text-danger" href="projects/delete/@project.Id">
+                            <span class="oi oi-trash" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @code {
-
+    [Parameter]
+    public List<Project> Projects { get; set; }
 }

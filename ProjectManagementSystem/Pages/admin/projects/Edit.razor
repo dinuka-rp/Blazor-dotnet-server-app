@@ -1,6 +1,11 @@
 ﻿@page "/projects/edit/{Id:guid}"
 
+@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
+@inject CompanyService CompanyService
+
 <h3>Edit Project</h3>
+<hr />
 
 @code {
 

@@ -4,8 +4,35 @@
 @inject ProjectService ProjectService
 
 
-<h3>Project Index</h3>
+<h3>Projects</h3>
+<hr />
+
+@if (projects == null || projects.Count == 0)
+{
+    <p><em>@displayMessage</em></p>
+}
+else
+{
+    <ProjectsTable Projects="projects" />
+}
+
+@* TODO: Reposition button *@
+<p>
+    <a class="btn btn-primary" href="/projects/create">
+        <span class="oi oi-plus" aria-hidden="true"></span> Create Project
+    </a>
+</p>
 
 @code {
+    List<Project> projects;
+    public String displayMessage = "Loading Projects";
 
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await Task.Run(() => ProjectService.GetAllProjectsAsync());
+        if (projects.Count == 0)
+        {
+            displayMessage = "No Projects Found";
+        }
+    }
 }

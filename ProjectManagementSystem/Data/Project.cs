@@ -23,6 +23,6 @@ namespace ProjectManagementSystem.Data
 
         public Company Company { get; set; }
         public List<ApplicationUser> Users { get; set; }
-        public List<Ticket> Tickets { get; set; }
+        public List<Ticket> Tickets { get; set; }       // this isn't exactly necessary -LINQ can be used to quert from Tickets side
     }
 }

@@ -1,7 +1,52 @@
 ﻿@page "/projects/create"
 
+@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
+@inject ProjectService ProjectService
+
 <h3>Create Project</h3>
+<hr />
+
+<EditForm Model="project" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @* this will validate the input against the fields mentioned in the model *@
+
+    <div class="form-group">
+        <label for="description-input" class="control-label">* Project Code</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@project.Code"></InputText>
+        <ValidationMessage For="@(()=>project.Code)" />
+    </div>
+    <div class="form-group">
+        <label for="description-input" class="control-label">Project Name</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@project.Name"></InputText>
+        <ValidationMessage For="@(()=>project.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="description-input" class="control-label">Project Description</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@project.Description"></InputText>
+        <ValidationMessage For="@(()=>project.Description)" />
+    </div>
+
+    <div>
+        @* load companies onenter in above search *@
+        @*@bind-value="companyToAdd" @bind-value:event="oninput"*@
+
+        @* add users to project from here? *@
+    </div>
+
+    <NavLink class="btn btn-outline-secondary" href="projects">
+        <span aria-hidden="true">Cancel</span>
+    </NavLink>
+
+    <button type="submit" class="btn btn-primary">Create Project</button>
+</EditForm>
 
 @code {
+    private Project project { get; set; } = new Project();
 
+    protected async void HandleValidSubmit()
+    {
+        await ProjectService.InsertProjectAsync(project);
+        Navigation.NavigateTo("projects");
+    }
 }

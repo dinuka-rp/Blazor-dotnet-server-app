@@ -28,6 +28,13 @@
     </div>
 
     <div>
+        @* >>>>>>> Search with select isn't needed here because only one company can be chosen - select is enough*@
+        @*<div>
+            <label for="user-select">Assigned User/s</label>
+            <input type="search" id="user-select" class="form-control"
+                   @bind-value="searchInput" @bind-value:event="oninput"
+                   @onkeydown="@SearchUsers" placeholder="Search " />
+        </div>*@
         @* load companies onenter in above search *@
         @*@bind-value="companyToAdd" @bind-value:event="oninput"*@
 
@@ -43,6 +50,8 @@
 
 @code {
     private Project project { get; set; } = new Project();
+
+    public String searchInput { get; set; }
 
     protected async void HandleValidSubmit()
     {

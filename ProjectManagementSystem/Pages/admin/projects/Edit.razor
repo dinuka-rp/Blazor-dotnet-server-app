@@ -44,7 +44,7 @@ else
             <span aria-hidden="true">Cancel</span>
         </NavLink>
 
-        <button type="submit" class="btn btn-primary">Create Project</button>
+        <button type="submit" class="btn btn-primary">Update Project</button>
     </EditForm>
 }
 
@@ -64,6 +64,7 @@ else
         {
             displayMessage = "Project with Id: " + Id + " Not Found";
         }
+        Console.WriteLine(project);
     }
 
     protected async void UpdateProject()

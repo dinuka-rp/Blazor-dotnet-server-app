@@ -1,7 +1,93 @@
 ﻿@page "/projects/delete/{Id:guid}"
 
-<h3>Delete Project</h3>
+@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
+@inject ProjectService ProjectService
 
+<h3>Delete Project?</h3>
+<hr />
+
+@if (project == null)
+{
+    <p><em>@displayMessage</em></p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Project Id</dt>
+        <dd class="col-sm-10">@project.Id</dd>
+
+        <dt class="col-sm-2">
+            Project Code
+        </dt>
+        <dd class="col-sm-10">
+            @project.Code
+        </dd>
+        <dt class="col-sm-2">
+            Project Name
+        </dt>
+        <dd class="col-sm-10">
+            @project.Name
+        </dd>
+        <dt class="col-sm-2">
+            Project Description
+        </dt>
+        <dd class="col-sm-10">
+            @project.Description
+        </dd>
+
+        <dt class="col-sm-2">
+            Company Name
+        </dt>
+        <dd class="col-sm-10">
+            @project.Company.Name
+        </dd>
+
+        <dt class="col-sm-2">
+            Assigned Users
+        </dt>
+        @if (project.Users != null)
+        {
+
+            @foreach (var user in project.Users)
+            {
+                <dd class="col-sm-10">
+                    @user.FirstName
+                </dd>
+            }}
+        else
+        {
+            <dd class="col-sm-10">
+                <em>None</em>
+            </dd>
+        }
+    </dl>
+
+    <button class="btn btn-danger" @onclick="DeleteProject">
+        <span class="oi oi-trash" aria-hidden="true"></span> Delete
+    </button>
+}
 @code {
+    [Parameter]
+    public Guid Id { get; set; }
 
+    public Project project { get; set; }
+    public String displayMessage = "Loading Project Details";
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+
+        project = await Task.Run(() => ProjectService.GetProjectAsync(Id));
+        if (project == null)
+        {
+            displayMessage = "Project with Id: " + Id + " Not Found";
+        }
+    }
+
+    private async Task DeleteProject()
+    {
+        await ProjectService.DeleteProjectAsync(project);
+        Navigation.NavigateTo("/projects");        // redirect to projects page
+    }
 }

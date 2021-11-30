@@ -1,6 +1,6 @@
 ﻿@page "/projects/details/{Id:guid}"
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 @inject NavigationManager Navigation
 @inject ProjectService ProjectService
 
@@ -10,7 +10,7 @@
 
 @if (project == null)
 {
-    <p><em>Loading Project Details</em></p>
+    <p><em>@displayMessage</em></p>
 }
 else
 {
@@ -68,11 +68,16 @@ else
     [Parameter]
     public Guid Id { get; set; }
     public Project project { get; set; }
+    public String displayMessage = "Loading Project Details";
 
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
 
         project = await Task.Run(() => ProjectService.GetProjectAsync(Id));
+        if (project == null)
+        {
+            displayMessage = "Project with Id: " + Id + " Not Found";
+        }
     }
 }

@@ -3,6 +3,8 @@
 @attribute [Authorize(Roles = "Admin")]
 @inject NavigationManager Navigation
 @inject ProjectService ProjectService
+@inject CompanyService CompanyService
+@inject UserService UserService
 
 <h3>Create Project</h3>
 <hr />
@@ -27,19 +29,48 @@
         <ValidationMessage For="@(()=>project.Description)" />
     </div>
 
-    <div>
-        @* >>>>>>> Search with select isn't needed here because only one company can be chosen - select is enough*@
-        @*<div>
-            <label for="user-select">Assigned User/s</label>
-            <input type="search" id="user-select" class="form-control"
-                   @bind-value="searchInput" @bind-value:event="oninput"
-                   @onkeydown="@SearchUsers" placeholder="Search " />
-        </div>*@
-        @* load companies onenter in above search *@
-        @*@bind-value="companyToAdd" @bind-value:event="oninput"*@
+    @if (companies == null)
+    {
+        <div>
+            <p><em>@displayCompanyMessage</em></p>
+        </div>
 
-        @* add users to project from here? *@
-    </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <label for="state-select" class="control-label">Assigned Company</label>
+            <InputSelect id="state-select" class="custom-select" @bind-Value="@chosenCompanyId">
+                @foreach (var company in companies)
+                    {
+                    <option selected value="@company.Id">@company.Name</option>
+                    }
+            </InputSelect>
+            <ValidationMessage For="@(()=>project.Company)" />
+        </div>
+    }
+
+    @if (users == null)
+    {
+        <div>
+            <p><em>@displayUsersMessage</em></p>
+        </div>
+    }
+    else
+    {
+        <div>
+            @*<div>
+                    <label for="user-select">Assigned User/s</label>
+                    <input type="search" id="user-select" class="form-control"
+                           @bind-value="searchInput" @bind-value:event="oninput"
+                           @onkeydown="@SearchUsers" placeholder="Search " />
+                </div>*@
+            @* load users onenter in above search *@
+
+            @* add users to project from here? *@
+        </div>}
+}
+
 
     <NavLink class="btn btn-outline-secondary" href="projects">
         <span aria-hidden="true">Cancel</span>
@@ -50,11 +81,40 @@
 
 @code {
     private Project project { get; set; } = new Project();
+    List<Company> companies;
+    private Guid chosenCompanyId;
 
-    public String searchInput { get; set; }
+    private List<ApplicationUser> users { get; set; }
+    private List<ApplicationUser> assignedUsers { get; set; }
+
+    //public String searchInput { get; set; }
+
+    public String displayCompanyMessage = "Loading Companies";
+    public String displayUsersMessage = "Loading Users";
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+
+        companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
+        if (companies == null)
+        {
+            displayCompanyMessage = "No Companies found, please create a company first in the Companies page.";
+        }
+
+        //TODO: create User search using LINQ
+        //users = await Task.Run(() => UserService.GetSearchedUsersAsync());
+        //if (users == null)
+        //{
+        //    displayUsersMessage = "No Users found";
+        //}
+    }
 
     protected async void HandleValidSubmit()
     {
+        project.Company = companies.Find((company) => company.Id == chosenCompanyId);
+        project.Users = assignedUsers;
+
         await ProjectService.InsertProjectAsync(project);
         Navigation.NavigateTo("projects");
     }

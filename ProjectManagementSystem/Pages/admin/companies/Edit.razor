@@ -23,6 +23,25 @@ else
         <ValidationMessage For="@(()=>company.Name)" />
     </div>
 
+    <dt class="col-sm-2">
+        Assigned Projects
+    </dt>
+    @if (company.Projects == null)
+    {
+        <dd class="col-sm-10">
+            <em>None</em>
+        </dd>
+    }
+    else
+    {
+        @foreach (var project in company.Projects)
+        {
+            <dd class="col-sm-10">
+                @project.Name
+            </dd>
+        }
+    }
+
     <div>
         @* TODO: load projects onenter in above search *@
         @*@bind-value="projectIdToAdd" @bind-value:event="oninput"*@

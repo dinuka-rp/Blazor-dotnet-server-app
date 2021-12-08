@@ -18,7 +18,7 @@ namespace ProjectManagementSystem.Data
         [StringLength(30)]
         public String Name { get; set; }
 
-        [StringLength(50)]
+        [StringLength(200)]
         public String Description { get; set; }
 
         public Company Company { get; set; }

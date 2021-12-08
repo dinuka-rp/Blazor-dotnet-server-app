@@ -33,7 +33,7 @@
         <label for="user-select">Assigned User/s</label>
         <input type="search" id="user-select" class="form-control"
                @bind-value="userSearchInput" @bind-value:event="oninput"
-               @onkeydown="@SearchUsers" placeholder="Choose User" />
+               @onkeydown="@SearchUsers" placeholder="Search Users" />
     </div>
     <div>
         @* load users onenter in above search *@
@@ -52,7 +52,7 @@
     private String userSearchInput;
     // TODO: check an appropriate method to assign a user/ multiple users
     private String userIdToAdd;
-    private List<String> assginedUserIds = new List<String>() { };
+    private List<ApplicationUser> assignedUsers;
 
     private void SearchUsers()
     {
@@ -63,6 +63,8 @@
 
     protected async void HandleValidSubmit()
     {
+        ticket.Users = assignedUsers;
+
         await TicketService.InsertTicketAsync(ticket);
         Navigation.NavigateTo("project-board");
     }

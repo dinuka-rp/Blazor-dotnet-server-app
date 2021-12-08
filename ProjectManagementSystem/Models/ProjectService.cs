@@ -39,7 +39,7 @@ namespace ProjectManagementSystem.Models
         #region Get Project by Id
         public async Task<Project> GetProjectAsync(Guid Id)
         {
-            Project project = await _applicationDbContext.Projects.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            Project project = await _applicationDbContext.Projects.FindAsync(Id);
             return project;
         }
         #endregion

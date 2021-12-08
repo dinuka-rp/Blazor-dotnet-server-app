@@ -28,6 +28,17 @@ namespace ProjectManagementSystem.Models
         }
         #endregion
 
+        #region Get Companies by Company Search name
+        public async Task<List<Company>> SearchCompaniesAsync(String searchTerm)
+        {
+            String trimmedSearchTerm = searchTerm.Trim().ToLower();
+
+            return await _applicationDbContext.Companies.Where(c =>
+                c.Name.ToLower().Contains(trimmedSearchTerm)
+            ).ToListAsync();
+        }
+        #endregion
+
         #region Insert Company
         public async Task<bool> InsertCompanyAsync(Company company)
         {

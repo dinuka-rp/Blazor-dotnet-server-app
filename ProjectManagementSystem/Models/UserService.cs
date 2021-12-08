@@ -35,6 +35,20 @@ namespace ProjectManagementSystem.Models
         //}
         #endregion
 
+        #region Get Users by Firstname/ Lastname/ Email/ Username Search
+        public async Task<List<ApplicationUser>> SearchUsersAsync(String searchTerm)
+        {
+            String trimmedSearchTerm = searchTerm.Trim().ToLower();
+
+            return await _applicationDbContext.Users.Where(c => 
+            c.FirstName.ToLower().Contains(trimmedSearchTerm) ||
+            c.LastName.ToLower().Contains(trimmedSearchTerm) ||
+            c.Email.ToLower().Contains(trimmedSearchTerm) ||
+            c.UserName.ToLower().Contains(trimmedSearchTerm)
+            ).ToListAsync();
+        }
+        #endregion
+
         #region Insert User
         public async Task<bool> InsertUserAsync(ApplicationUser user)
         {
@@ -44,7 +58,7 @@ namespace ProjectManagementSystem.Models
         }
         #endregion
 
-        #region Get Ticket by Id
+        #region Get User by Id
         public async Task<ApplicationUser> GetUserAsync(String Id)
         {
             ApplicationUser user = await _applicationDbContext.Users.FirstOrDefaultAsync(c => c.Id.Equals(Id));
@@ -52,7 +66,7 @@ namespace ProjectManagementSystem.Models
         }
         #endregion
 
-        #region Update Ticket
+        #region Update User
         public async Task<bool> UpdateUserAsync(ApplicationUser user)
         {
             _applicationDbContext.Users.Update(user);
@@ -61,7 +75,7 @@ namespace ProjectManagementSystem.Models
         }
         #endregion
 
-        #region Delete Ticket
+        #region Delete User
         public async Task<bool> DeleteUserAsync(ApplicationUser user)
         {
             _applicationDbContext.Remove(user);

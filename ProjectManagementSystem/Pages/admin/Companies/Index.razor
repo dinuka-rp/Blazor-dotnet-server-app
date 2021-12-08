@@ -6,6 +6,17 @@
 <h3>Companies</h3>
 <hr />
 
+<div class="d-md-flex">
+    @*TODO: Have input and buttons in the same line*@
+    <input type="search" id="company-search" class="form-control"
+           @bind-value="searchInput" @bind-value:event="oninput"
+           @onkeyup="@EnterSearch" placeholder="Search Companies by Name" />
+    <button class="btn btn-outline-primary" @onclick="HandleSearch">
+        <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
+    </button>
+    <button class="btn btn-outline-secondary" @onclick="ClearSearch">Clear Search</button>
+</div>
+
 @if (companies == null || companies.Count == 0)
 {
     <p><em>@displayMessage</em></p>
@@ -16,18 +27,53 @@ else
 }
 
 @* TODO: Reposition button *@
-<p>
+<div>
     <a class="btn btn-primary" href="/companies/create">
         <span class="oi oi-plus" aria-hidden="true"></span> Create Company
     </a>
-</p>
+</div>
 
 @code {
     List<Company> companies;
-    public String displayMessage = "Loading Companies";
+    private String displayMessage = "Loading Companies";
+
+    private String searchInput = "";
 
     protected override async Task OnInitializedAsync()
     {
+        companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
+        if (companies.Count == 0)
+        {
+            displayMessage = "No Companies Found";
+        }
+    }
+
+
+    private async Task EnterSearch(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+        {        // fire on enter
+            await HandleSearch();
+        }
+        else if (eventArgs.Key == "Escape")
+        {
+            await ClearSearch();
+        }
+    }
+
+    private async Task HandleSearch()
+    {
+        companies = await CompanyService.SearchCompaniesAsync(searchInput);
+        if (companies.Count == 0)
+        {
+            displayMessage = "No Companies with the name: " + searchInput + " were found.";
+        }
+
+    }
+
+    private async Task ClearSearch()
+    {
+        searchInput = "";
         companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
         if (companies.Count == 0)
         {

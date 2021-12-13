@@ -17,7 +17,7 @@ namespace ProjectManagementSystem.Data
         Cancelled,
     }
 
-    public class Ticket
+    public class Ticket : BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementSystem.Data
 {
-    public class Company
+    public class Company : BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

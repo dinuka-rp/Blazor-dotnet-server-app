@@ -3,6 +3,7 @@
 @attribute [Authorize(Roles = "Admin")]
 @inject NavigationManager Navigation
 @inject ProjectService ProjectService
+@inject CompanyService CompanyService
 
 <h3>Edit Project</h3>
 <hr />
@@ -33,9 +34,34 @@ else
             <ValidationMessage For="@(() => project.Description)" />
         </div>
 
+        <div class="form-group">
+            <label for="completedOn-input" class="control-label">Completed On</label>
+            <InputDate id="completedOn-input" class="form-control" @bind-Value="@project.CompletedOn"></InputDate>
+            <ValidationMessage For="@(() => project.CompletedOn)" />
+        </div>
+
         <div>
-            @* load companies onenter in above search *@
-            @*@bind-value="companyToAdd" @bind-value:event="oninput"*@
+            @if (companies == null)
+            {
+                <div>
+                    <p><em>@displayCompanyMessage</em></p>
+                </div>
+
+            }
+            else
+            {
+                <div class="form-group">
+                    <label for="state-select" class="control-label">Assigned Company</label>
+                    <InputSelect id="state-select" class="custom-select" @bind-Value="@chosenCompanyId">
+                        @foreach (var company in companies)
+                                {
+                            <option selected value="@company.Id">@company.Name</option>
+                                }
+                    </InputSelect>
+                    <ValidationMessage For="@(()=>project.Company)" />
+                </div>
+            }
+
 
             @* add users to project from here? *@
         </div>
@@ -51,9 +77,12 @@ else
 @code {
     [Parameter]
     public Guid Id { get; set; }
+    List<Company> companies;
+    private Guid chosenCompanyId;
 
     private Project project { get; set; } = new Project();
     public String displayMessage = "Loading Project Details";
+    public String displayCompanyMessage = "Loading Companies";
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,11 +93,24 @@ else
         {
             displayMessage = "Project with Id: " + Id + " Not Found";
         }
-        Console.WriteLine(project);
+
+        if (project.Company != null)
+        {
+            chosenCompanyId = project.Company.Id;
+        }
+
+        companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
+        if (companies == null)
+        {
+            displayCompanyMessage = "No Companies found, please create a company first in the Companies page.";
+        }
+
     }
 
     protected async void UpdateProject()
     {
+        project.Company = companies.Find((company) => company.Id == chosenCompanyId);
+
         await ProjectService.UpdateProjectAsync(project);
         Navigation.NavigateTo("projects");
     }

@@ -9,5 +9,6 @@ namespace ProjectManagementSystem.Data
     {
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
+        public DateTime? CompletedOn { get; set; }
     }
 }

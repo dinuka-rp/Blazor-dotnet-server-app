@@ -39,6 +39,11 @@ namespace ProjectManagementSystem.Models
         #region Insert Ticket
         public async Task<bool> InsertTicketAsync(Ticket ticket)
         {
+            if (ticket.Status == TicketStatus.Done)
+            {
+                ticket.CompletedOn = DateTime.UtcNow;
+            }
+
             await _applicationDbContext.Tickets.AddAsync(ticket);
             await _applicationDbContext.SaveChangesAsync();
             return true;
@@ -56,6 +61,11 @@ namespace ProjectManagementSystem.Models
         #region Update Ticket
         public async Task<bool> UpdateTicketAsync(Ticket ticket)
         {
+            if(ticket.Status == TicketStatus.Done)
+            {
+                ticket.CompletedOn = DateTime.UtcNow;
+            }
+
             _applicationDbContext.Tickets.Update(ticket);
             await _applicationDbContext.SaveChangesAsync();
             return true;

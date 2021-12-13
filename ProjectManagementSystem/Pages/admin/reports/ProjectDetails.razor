@@ -1,0 +1,13 @@
+﻿@page "/reports/projects/{ProjectCode}"
+
+@attribute [Authorize(Roles = "Admin")]
+
+<h3>Report on Project: @ProjectCode</h3>
+
+<p>View completed Tickets & Progress</p>
+
+@code {
+    [Parameter]
+    public String ProjectCode { get; set; }
+
+}

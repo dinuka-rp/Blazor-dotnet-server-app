@@ -1,0 +1,56 @@
+﻿@page "/reports"
+
+@attribute [Authorize(Roles = "Admin")]
+@inject ReportService ReportService
+
+<h3>Report</h3>
+
+<div class="d-md-flex">
+    <div class='col-md-3'>
+        <div class="form-group">
+            <div class="input-group date">
+                <label for="start-date-input">Start date: </label>
+                <input type="date" id="start-date-input" name="Start Date"
+                       max="@DateTime.Now.Date.ToString("yyyy-MM-dd")" @bind-value="@startDate">
+            </div>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class="form-group">
+            <div class="input-group date">
+                <label for="end-date-input">End Date: </label>
+                <input type="date" id="end-date-input" name="End Date" @bind-value="@endDate"
+                       min="@startDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.Date.ToString("yyyy-MM-dd")">
+            </div>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <button class="btn btn-primary" @onclick="GenerateReport">
+            Generate Report
+        </button>
+    </div>
+</div>
+
+@*View all completed projects?*@
+@*
+    Show only ticket completion chart here??
+    Have link to AllTicketsReport -> View all completed tickets?*@
+
+@code {
+    private DateTime startDate = DateTime.Now.Date;
+    private DateTime endDate = DateTime.Now.Date;
+
+    private Report report;
+
+    private async Task GenerateReport()
+    {
+        //report = await Task.Run(() => ReportService.());
+    }
+}
+
+@* reference: https://stackoverflow.com/questions/55796060/blazor-binding-value-to-input-date-in-one-way*@
+
+@*https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings
+    https://github.com/jdtcn/BlazorDateRangePicker
+    https://www.youtube.com/watch?v=g3mZ8mpA-lI
+*@

@@ -12,8 +12,6 @@ namespace ProjectManagementSystem.Data
 
         public List<Ticket> CompletedTickets { get; set; }
 
-        // TODO: move this into ReportController
-
         public Report GenerateReport(DateTime startDate , DateTime endDate ) 
         {
             // TODO: call DB & return created Report

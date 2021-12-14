@@ -118,4 +118,3 @@ namespace ProjectManagementSystem.Data
 // https://threewill.com/how-to-auto-generate-created-updated-field-in-ef-core/
 // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-6.0#add-all-user-navigation-properties
 // https://github.com/dotnet/efcore/issues/9503
-// https://stackoverflow.com/a/51005445/11005638

@@ -1,6 +1,4 @@
-﻿@using ProjectManagementSystem.Data
-
-<div class="table-responsive">
+﻿<div class="table-responsive">
     <table class="table table-hover">
         <thead class="thead-light">
             @* TODO: add table sort *@
@@ -23,11 +21,19 @@
                     <td>
                         @user.UserName
                     </td>
-                    <td>
-                        @* TODO: think of a way to query this from the DB - using LINQ JOIN ? *@
-                        @*@user.UserRole*@
-                    </td>
-
+                    @if (user.UserRoles == null)
+                    {
+                        <td><em>No Role</em></td>
+                    }
+                    else
+                    {
+                        <td>
+                            @foreach (var val in user.UserRoles)
+                            {
+                                @val.Role.Name
+                            }
+                        </td>
+                    }
 
                     <td>
                         @* TODO: style add padding *@

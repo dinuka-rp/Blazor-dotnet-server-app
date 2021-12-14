@@ -22,6 +22,7 @@ else
     </p>
 }
 
+
 @* display all available users in the system - allow to change user role (redirect to edit screen for now) *@
 
 @code {
@@ -30,7 +31,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        users = await Task.Run(() => UserService.GetAllUsersAsync());
+        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
         if (users.Count == 0)
         {
             displayMessage = "No Users Found";

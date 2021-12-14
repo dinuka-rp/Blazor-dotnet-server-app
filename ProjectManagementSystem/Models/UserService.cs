@@ -35,12 +35,37 @@ namespace ProjectManagementSystem.Models
         //}
         #endregion
 
+        #region Get List of Users with User Roles
+        public async Task<List<ApplicationUser>> GetAllUsersWithRolesAsync()
+        {
+            //return await (from usr in _applicationDbContext.Users
+            //              join userRole in _applicationDbContext.UserRoles on usr.Id equals userRole.UserId
+            //              join role in _applicationDbContext.Roles on userRole.RoleId equals role.Id into roles
+            //              select new UserDTO
+            //              {
+            //                  ApplicationUser = usr,
+            //                  IdentityRoles = (List<Microsoft.AspNetCore.Identity.IdentityRole>)roles
+            //              }).ToListAsync();
+
+            return await _applicationDbContext.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role).ToListAsync();
+
+            //    .Select(usr=> new UserDTO
+            //{
+            //    ApplicationUser = usr,
+            //    IdentityRoles =
+            //    _applicationDbContext.Roles.Where(role => role.Id ==
+            //    _applicationDbContext.UserRoles.Where(usrRoles => usrRoles.UserId == usr.Id).FirstOrDefault().RoleId)
+            //}
+            //    ).ToListAsync();
+        }
+        #endregion
+
         #region Get Users by Firstname/ Lastname/ Email/ Username Search
         public async Task<List<ApplicationUser>> SearchUsersAsync(String searchTerm)
         {
             String trimmedSearchTerm = searchTerm.Trim().ToLower();
 
-            return await _applicationDbContext.Users.Where(c => 
+            return await _applicationDbContext.Users.Where(c =>
             c.FirstName.ToLower().Contains(trimmedSearchTerm) ||
             c.LastName.ToLower().Contains(trimmedSearchTerm) ||
             c.Email.ToLower().Contains(trimmedSearchTerm) ||
@@ -86,3 +111,6 @@ namespace ProjectManagementSystem.Models
 
     }
 }
+
+//reference: https://stackoverflow.com/a/51005445/11005638
+//https://stackoverflow.com/a/62841946/11005638

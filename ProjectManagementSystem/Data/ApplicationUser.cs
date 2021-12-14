@@ -17,7 +17,6 @@ namespace ProjectManagementSystem.Data
 
     public class ApplicationUser : IdentityUser
     {
-        // TODO: Add string character limits for data in all places
         [Required][PersonalData]
         [StringLength(15)]
         public String FirstName { get; set; }
@@ -28,5 +27,11 @@ namespace ProjectManagementSystem.Data
 
         public List<Project> Projects { get; set; } 
         public List<Ticket> Tickets { get; set; }
+
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
+        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+        public virtual ICollection<IdentityUserToken<string>> Tokens { get; set; }
+
     }
 }

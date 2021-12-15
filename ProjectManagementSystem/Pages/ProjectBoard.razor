@@ -1,11 +1,12 @@
 ﻿@page "/project-board"
 
-@attribute [Authorize]  
+@attribute [Authorize]
 @inject TicketService TicketService
 @* the page will redirect to login, if not logged in - try to load tickets only if logged in (authorized) *@
 
 @* TODO: have a breakcrumb? *@
-<h4>Project Board</h4>
+<h3>Project Board</h3>
+<h5>Tickets</h5>
 <hr />
 
 @if (tickets == null || tickets.Count == 0)
@@ -14,8 +15,6 @@
 }
 else
 {
-    <h3>Tickets</h3>
-
     <TicketsTable Tickets="tickets" />
 }
 @* TODO: Reposition button *@

@@ -39,7 +39,12 @@ namespace ProjectManagementSystem.Models
         #region Insert Ticket
         public async Task<bool> InsertTicketAsync(Ticket ticket)
         {
-            if (ticket.Status == TicketStatus.Done)
+            if (ticket.Status == TicketStatus.InProgress)
+            {
+                // TODO: set this only if it hasn't been set before - because tickets can be reopened - the initial progress will be lost if not
+                ticket.StartedOn = DateTime.UtcNow;
+            }
+            else if (ticket.Status == TicketStatus.Done)
             {
                 ticket.CompletedOn = DateTime.UtcNow;
             }
@@ -61,7 +66,12 @@ namespace ProjectManagementSystem.Models
         #region Update Ticket
         public async Task<bool> UpdateTicketAsync(Ticket ticket)
         {
-            if(ticket.Status == TicketStatus.Done)
+            if (ticket.Status == TicketStatus.InProgress)
+            {
+                // TODO: set this only if it hasn't been set before - because tickets can be reopened - the initial progress will be lost if not
+                ticket.StartedOn = DateTime.UtcNow;
+            }
+            else if (ticket.Status == TicketStatus.Done)
             {
                 ticket.CompletedOn = DateTime.UtcNow;
             }

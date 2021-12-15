@@ -31,26 +31,75 @@
     </div>
 </div>
 
-@*View all completed projects?*@
-@*
-    Show only ticket completion chart here??
-    Have link to AllTicketsReport -> View all completed tickets?*@
+<hr />
+@*----------------------------------*@
+
+@if (report == null)
+{
+    <p><em>Please Select a Date Range and Click on <strong>Generate Report</strong></em></p>
+}
+else
+{
+    <div>
+        <h4>Report Overview</h4>
+
+        <div>
+            <dl class="row">
+                <dt class="col-sm-3">Number of Completed Projects</dt>
+                <dd class="col-sm-5">@report.CompletedProjects.Count</dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Number of Completed Projects</dt>
+                <dd class="col-sm-5">@report.CompletedTickets.Count</dd>
+            </dl>
+        </div>
+    </div>
+
+    <hr />
+    @*----------------------------------*@
+    @*View all completed projects*@
+    <div>
+        <h4>Completed Projects</h4>
+
+        @if (report.CompletedProjects == null || report.CompletedProjects.Count == 0)
+        {
+            <p><em>No Projects were completed within the chosen date range</em></p>
+        }
+        else
+        {
+            <ProjectsTable Projects="report.CompletedProjects" />
+        }
+    </div>
+
+    <hr />
+    @*----------------------------------*@
+    @*View all completed tickets*@
+    @if (report.CompletedTickets == null || report.CompletedTickets.Count == 0)
+    {
+        <p><em>No Tickets were completed within the chosen date range</em></p>
+    }
+    else
+    {
+        <TicketsTable Tickets="report.CompletedTickets" />
+    }
+}
 
 @code {
     private DateTime startDate = DateTime.Now.Date;
     private DateTime endDate = DateTime.Now.Date;
 
-    private Report report;
+    // TODO: it's better if the report can be persisted - if the user goes to a project/ ticket and come back, the report needs to be regenerated.
+    private ReportDTO report;
 
     private async Task GenerateReport()
     {
-        //report = await Task.Run(() => ReportService.());
+        report = await Task.Run(() => ReportService.GetReportWithDateRangeAsync(startDate, endDate));
     }
 }
 
 @* reference: https://stackoverflow.com/questions/55796060/blazor-binding-value-to-input-date-in-one-way*@
 
-@*https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings
+@*extra: https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings
     https://github.com/jdtcn/BlazorDateRangePicker
     https://www.youtube.com/watch?v=g3mZ8mpA-lI
 *@

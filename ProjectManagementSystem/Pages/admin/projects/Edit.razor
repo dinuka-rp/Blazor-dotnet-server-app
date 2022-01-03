@@ -10,83 +10,84 @@
 
 @if (project == null)
 {
-    <p><em>@displayMessage</em></p>
+<p><em>@displayMessage</em></p>
 }
 else
 {
-    <EditForm Model="project" OnValidSubmit="@UpdateProject">
-        <DataAnnotationsValidator />
-        @* this will validate the input against the fields mentioned in the model *@
+<EditForm Model="project" OnValidSubmit="@UpdateProject">
+    <DataAnnotationsValidator />
+    @* this will validate the input against the fields mentioned in the model *@
 
-        <div class="form-group">
-            <label for="description-input" class="control-label">* Project Code</label>
-            <InputText id="description-input" class="form-control" @bind-Value="@project.Code"></InputText>
-            <ValidationMessage For="@(() => project.Code)" />
-        </div>
-        <div class="form-group">
-            <label for="description-input" class="control-label">Project Name</label>
-            <InputText id="description-input" class="form-control" @bind-Value="@project.Name"></InputText>
-            <ValidationMessage For="@(() => project.Name)" />
-        </div>
-        <div class="form-group">
-            <label for="description-input" class="control-label">Project Description</label>
-            <InputText id="description-input" class="form-control" @bind-Value="@project.Description"></InputText>
-            <ValidationMessage For="@(() => project.Description)" />
-        </div>
+    <div class="form-group">
+        <label for="description-input" class="control-label">* Project Code</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@project.Code"></InputText>
+        <ValidationMessage For="@(() => project.Code)" />
+    </div>
+    <div class="form-group">
+        <label for="description-input" class="control-label">Project Name</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@project.Name"></InputText>
+        <ValidationMessage For="@(() => project.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="description-input" class="control-label">Project Description</label>
+        <InputText id="description-input" class="form-control" @bind-Value="@project.Description"></InputText>
+        <ValidationMessage For="@(() => project.Description)" />
+    </div>
 
-        <div class="form-group">
-            <label for="startedOn-input" class="control-label">Started On</label>
-            <InputDate id="startedOn-input" class="form-control" @bind-Value="@project.StartedOn"></InputDate>
-            <ValidationMessage For="@(() => project.StartedOn)" />
-        </div>
+    <div class="form-group">
+        <label for="startedOn-input" class="control-label">Started On</label>
+        <InputDate id="startedOn-input" class="form-control" @bind-Value="@project.StartedOn"></InputDate>
+        <ValidationMessage For="@(() => project.StartedOn)" />
+    </div>
 
-        <div class="form-group">
-            <label for="completedOn-input" class="control-label">Completed On</label>
-            <InputDate id="completedOn-input" class="form-control" @bind-Value="@project.CompletedOn"></InputDate>
-            <ValidationMessage For="@(() => project.CompletedOn)" />
-        </div>
+    <div class="form-group">
+        <label for="completedOn-input" class="control-label">Completed On</label>
+        <InputDate id="completedOn-input" class="form-control" @bind-Value="@project.CompletedOn"></InputDate>
+        <ValidationMessage For="@(() => project.CompletedOn)" />
+    </div>
 
+    <div>
+        @if (companies == null)
+        {
         <div>
-            @if (companies == null)
-            {
-                <div>
-                    <p><em>@displayCompanyMessage</em></p>
-                </div>
-
-            }
-            else
-            {
-                <div class="form-group">
-                    <label for="state-select" class="control-label">Assigned Company</label>
-                    <InputSelect id="state-select" class="custom-select" @bind-Value="@chosenCompanyId">
-                        @foreach (var company in companies)
-                                {
-                            <option selected value="@company.Id">@company.Name</option>
-                                }
-                    </InputSelect>
-                    <ValidationMessage For="@(()=>project.Company)" />
-                </div>
-            }
-
-
-            @* add users to project from here? *@
-            @*create an autocomplete component that returns the first value in the list on enter - allow to select from the dropdown list as well*@
-
-            @* Extra: how to call a function in the parent component https://stackoverflow.com/a/66866830/11005638*@
+            <p><em>@displayCompanyMessage</em></p>
         </div>
 
-        <NavLink class="btn btn-outline-secondary" href="projects">
-            <span aria-hidden="true">Cancel</span>
-        </NavLink>
+        }
+        else
+        {
+        <div class="form-group">
+            <label for="state-select" class="control-label">Assigned Company</label>
+            <InputSelect id="state-select" class="custom-select" @bind-Value="@chosenCompanyId">
+                @foreach (var company in companies)
+                {
+                <option selected value="@company.Id">@company.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>project.Company)" />
+        </div>
+        }
 
-        <button type="submit" class="btn btn-primary">Update Project</button>
-    </EditForm>
+
+        @* add users to project from here? *@
+        @*create an autocomplete component that returns the first value in the list on enter - allow to select from the dropdown list as well*@
+
+        @* Extra: how to call a function in the parent component https://stackoverflow.com/a/66866830/11005638*@
+    </div>
+
+    <NavLink class="btn btn-outline-secondary" href="projects">
+        <span aria-hidden="true">Cancel</span>
+    </NavLink>
+
+    <button type="submit" class="btn btn-primary">Update Project</button>
+</EditForm>
 }
 
 @code {
     [Parameter]
     public Guid Id { get; set; }
-    List<Company> companies;
+    List<Company>
+    companies;
     private Guid chosenCompanyId;
 
     private Project project { get; set; } = new Project();
@@ -95,32 +96,32 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+    base.OnInitialized();
 
-        project = await Task.Run(() => ProjectService.GetProjectAsync(Id));
-        if (project == null)
-        {
-            displayMessage = "Project with Id: " + Id + " Not Found";
-        }
+    project = await Task.Run(() => ProjectService.GetProjectAsync(Id));
+    if (project == null)
+    {
+    displayMessage = "Project with Id: " + Id + " Not Found";
+    }
 
-        if (project.Company != null)
-        {
-            chosenCompanyId = project.Company.Id;
-        }
+    if (project.Company != null)
+    {
+    chosenCompanyId = project.Company.Id;
+    }
 
-        companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
-        if (companies == null)
-        {
-            displayCompanyMessage = "No Companies found, please create a company first in the Companies page.";
-        }
+    companies = await Task.Run(() => CompanyService.GetAllCompaniesAsync());
+    if (companies == null)
+    {
+    displayCompanyMessage = "No Companies found, please create a company first in the Companies page.";
+    }
 
     }
 
     protected async void UpdateProject()
     {
-        project.Company = companies.Find((company) => company.Id == chosenCompanyId);
+    project.Company = companies.Find((company) => company.Id == chosenCompanyId);
 
-        await ProjectService.UpdateProjectAsync(project);
-        Navigation.NavigateTo("projects");
+    await ProjectService.UpdateProjectAsync(project);
+    Navigation.NavigateTo("projects");
     }
-}
+    }

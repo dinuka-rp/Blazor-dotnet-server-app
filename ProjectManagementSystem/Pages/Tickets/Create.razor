@@ -12,7 +12,6 @@
     <DataAnnotationsValidator />
     @* this will validate the input against the fields mentioned in the model *@
 
-    @* TODO: select project*@
     @if (projects == null)
     {
         <div>
@@ -63,6 +62,7 @@
                @onkeypress="@SearchUsers" placeholder="Search Users" />
     </div>
     <div>
+        <p></p>
         @* load users onenter in above search *@
         @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
     </div>

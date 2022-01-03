@@ -30,6 +30,8 @@ namespace ProjectManagementSystem.Data
         public TicketStatus Status { get; set; }
 
         public List<ApplicationUser> Users { get; set; }
+
+        //TODO: make this a required field?
         public Project Project { get; set; }
     }
 }

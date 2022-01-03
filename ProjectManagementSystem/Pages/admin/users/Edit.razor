@@ -41,6 +41,7 @@
             <label for="role-select" class="control-label">User Role</label>
             @*display assigned roles with deletable discs here? -- not required for now*@
 
+            @*TODO: test if this works properly with a new user *@
             <InputSelect id="role-select" class="custom-select" @bind-Value="@user.UserRoles.First().RoleId">
                 <option value="@UserRoleEnum.Developer">Developer</option>
                 <option value="@UserRoleEnum.Admin">Admin</option>

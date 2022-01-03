@@ -3,6 +3,7 @@
 @attribute [Authorize(Roles = "Admin, Developer")]
 @inject NavigationManager Navigation
 @inject TicketService TicketService
+@inject ProjectService ProjectService
 
 <h3>Create Ticket</h3>
 <hr />
@@ -10,6 +11,29 @@
 <EditForm Model="ticket" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     @* this will validate the input against the fields mentioned in the model *@
+
+    @* TODO: select project*@
+    @if (projects == null)
+    {
+        <div>
+            <p><em>@displayProjectsMessage</em></p>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <label for="project-select" class="control-label">Project</label>
+            @*TODO: Better to have a search here instead of a select? - select is ok for now*@
+            <InputSelect id="project-select" class="custom-select" @bind-Value="@chosenProjectId">
+                @foreach (var project in projects)
+                    {
+                    <option selected value="@project.Id">@project.Name</option>
+                    }
+            </InputSelect>
+            <ValidationMessage For="@(()=>ticket.Project)" />
+        </div>
+    }
+
 
     <div class="form-group">
         <label for="description-input" class="control-label">* Ticket Description</label>
@@ -57,6 +81,23 @@
     private String userIdToAdd;
     private List<ApplicationUser> assignedUsers;
 
+    List<Project> projects;
+    private Guid chosenProjectId;
+
+    public String displayProjectsMessage = "Loading Projects";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+
+        projects = await Task.Run(() => ProjectService.GetAllProjectsAsync());
+        if (projects == null)
+        {
+            displayProjectsMessage = "No Projects found, please create a project first in the Projects page.";
+        }
+    }
+
     private void SearchUsers()
     {
         //params - userSearchInput
@@ -66,6 +107,7 @@
 
     protected async void HandleValidSubmit()
     {
+        ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
         ticket.Users = assignedUsers;
 
         await TicketService.InsertTicketAsync(ticket);

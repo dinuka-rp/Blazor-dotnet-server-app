@@ -31,6 +31,9 @@
     </div>
     <div>
         <label for="user-select">Assigned User/s</label>
+
+        @* show chips of already assigned users and allow to remove with - button *@
+
         <input type="search" id="user-select" class="form-control"
                @bind-value="userSearchInput" @bind-value:event="oninput"
                @onkeypress="@SearchUsers" placeholder="Search Users" />

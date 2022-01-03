@@ -35,6 +35,12 @@ else
         </div>
 
         <div class="form-group">
+            <label for="startedOn-input" class="control-label">Started On</label>
+            <InputDate id="startedOn-input" class="form-control" @bind-Value="@project.StartedOn"></InputDate>
+            <ValidationMessage For="@(() => project.StartedOn)" />
+        </div>
+
+        <div class="form-group">
             <label for="completedOn-input" class="control-label">Completed On</label>
             <InputDate id="completedOn-input" class="form-control" @bind-Value="@project.CompletedOn"></InputDate>
             <ValidationMessage For="@(() => project.CompletedOn)" />
@@ -64,6 +70,9 @@ else
 
 
             @* add users to project from here? *@
+            @*create an autocomplete component that returns the first value in the list on enter - allow to select from the dropdown list as well*@
+
+            @* Extra: how to call a function in the parent component https://stackoverflow.com/a/66866830/11005638*@
         </div>
 
         <NavLink class="btn btn-outline-secondary" href="projects">

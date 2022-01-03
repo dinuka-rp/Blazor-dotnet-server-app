@@ -1,9 +1,96 @@
-﻿
+﻿@page "/users/edit/{Id}"
+
+@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
+@inject UserService UserService
+
 <h3>Edit User</h3>
 <hr />
 
-@* check what's needed here - Profile also allows each user to edit their details *@
+<EditForm Model="user" OnValidSubmit="@UpdateUser">
+    <DataAnnotationsValidator />
+    @* this will validate the input against the fields mentioned in the model *@
+
+    <div class="form-group">
+        <label for="username-input" class="control-label">* Username</label>
+        <InputText id="username-input" class="form-control" @bind-Value="@user.UserName"></InputText>
+        <ValidationMessage For="@(() => user.UserName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="firstname-input" class="control-label">* First Name</label>
+        <InputText id="firstname-input" class="form-control" @bind-Value="@user.FirstName"></InputText>
+        <ValidationMessage For="@(() => user.FirstName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="lastname-input" class="control-label">Last Name</label>
+        <InputText id="lastname-input" class="form-control" @bind-Value="@user.LastName"></InputText>
+        <ValidationMessage For="@(() => user.LastName)" />
+    </div>
+
+    @if (user.UserRoles == null)
+    {
+        <div>
+            <p><em>@displayMessage</em></p>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <label for="role-select" class="control-label">User Role</label>
+            @*display assigned roles with deletable discs here? -- not required for now*@
+
+            <InputSelect id="role-select" class="custom-select" @bind-Value="@user.UserRoles.First().RoleId">
+                <option value="@UserRoleEnum.Developer">Developer</option>
+                <option value="@UserRoleEnum.Admin">Admin</option>
+            </InputSelect>
+            @*<ValidationMessage For="@(()=>user.UserRoles.First().Role.Id)" />*@
+        </div>
+    }
+
+    @*TODO: assign projects*@
+
+    @*assign tickets - only allow this from Edit Ticket side*@
+
+    <NavLink class="btn btn-outline-secondary" href="users">
+        <span aria-hidden="true">Cancel</span>
+    </NavLink>
+
+    <button type="submit" class="btn btn-primary">Update User</button>
+</EditForm>
+
 
 @code {
+    [Parameter]
+    public String Id { get; set; }
+    //List<Projects> projects;
+    //private Guid chosenProjectId;
 
+    private ApplicationUser user { get; set; } = new();
+    public String displayMessage = "Loading User Details";
+
+    //public String displayProjectMessage = "Loading Projects";
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+
+        user = await Task.Run(() => UserService.GetUserAsync(Id));
+        if (user == null)
+        {
+            displayMessage = "User with Id: " + Id + " Not Found";
+        }
+
+        // get projects on search? or select?
+
+    }
+
+    protected async void UpdateUser()
+    {
+        //    user.Projects.Add(projects.Find((company) => company.Id == chosenCompanyId));
+
+        await UserService.UpdateUserAsync(user);
+        Navigation.NavigateTo("users");
+    }
 }

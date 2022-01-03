@@ -1,6 +1,6 @@
 ﻿@page "/users/details/{Id}"
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 @inject NavigationManager Navigation
 @inject UserService UserService
 

@@ -14,83 +14,118 @@
 }
 else
 {
-<dl class="row">
-    <dt class="col-sm-2">Project Id</dt>
-    <dd class="col-sm-10">@project.Id</dd>
+    <dl class="row">
+        <dt class="col-sm-2">Project Id</dt>
+        <dd class="col-sm-10">@project.Id</dd>
 
-    <dt class="col-sm-2">
-        Project Code
-    </dt>
-    <dd class="col-sm-10">
-        @project.Code
-    </dd>
-    <dt class="col-sm-2">
-        Project Name
-    </dt>
-    <dd class="col-sm-10">
-        @project.Name
-    </dd>
-    <dt class="col-sm-2">
-        Project Description
-    </dt>
-    <dd class="col-sm-10">
-        @project.Description
-    </dd>
-    @if (project.CompletedOn == null)
-    {
         <dt class="col-sm-2">
-            Project Status
-        </dt>
-        <dd class="col-sm-10 text-danger">
-            Incomplete
-        </dd>
-    }
-    else
-    {
-        <dt class="col-sm-2">
-            Completed On
+            Project Code
         </dt>
         <dd class="col-sm-10">
-            @project.CompletedOn.Value.ToShortDateString()
+            @project.Code
         </dd>
-        //https://stackoverflow.com/a/6124299/11005638
-    }
+        <dt class="col-sm-2">
+            Project Name
+        </dt>
+        <dd class="col-sm-10">
+            @project.Name
+        </dd>
+        <dt class="col-sm-2">
+            Project Description
+        </dt>
+        <dd class="col-sm-10">
+            @project.Description
+        </dd>
 
-    <dt class="col-sm-2">
-        Company
-    </dt>
-    @if (project.Company == null)
-    {
-        <dd class="col-sm-10">
-            <em>Not Assigned</em>
-        </dd>
-    }
-    else
-    {
-        <dd class="col-sm-10">
-            @project.Company.Name
-        </dd>
-    }
 
-    <dt class="col-sm-2">
-        Assigned Users
-    </dt>
-    @if (project.Users == null)
-    {
-        <dd class="col-sm-10">
-            <em>None</em>
-        </dd>
-    }
-    else
-    {
-        @foreach (var user in project.Users)
+        @if (project.StartedOn != null)
         {
+            <dt class="col-sm-2">
+                Started On
+            </dt>
             <dd class="col-sm-10">
-                @user.FirstName
+                @project.StartedOn.Value.ToShortDateString()
+            </dd>
+            // reference: https://stackoverflow.com/a/6124299/11005638
+        }
+
+
+        @if (project.CompletedOn == null)
+        {
+            <dt class="col-sm-2">
+                Project Status
+            </dt>
+            <dd class="col-sm-10 text-danger">
+                Incomplete
             </dd>
         }
-    }
-</dl>
+        else
+        {
+            <dt class="col-sm-2">
+                Completed On
+            </dt>
+            <dd class="col-sm-10">
+                @project.CompletedOn.Value.ToShortDateString()
+            </dd>
+            // reference: https://stackoverflow.com/a/6124299/11005638
+        }
+
+        <dt class="col-sm-2">
+            Company
+        </dt>
+        @if (project.Company == null)
+        {
+            <dd class="col-sm-10">
+                <em>Not Assigned</em>
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                @project.Company.Name
+            </dd>
+        }
+
+        <dt class="col-sm-2">
+            Assigned Users
+        </dt>
+        @if (project.Users == null)
+        {
+            <dd class="col-sm-10">
+                <em>None</em>
+            </dd>
+        }
+        else
+        {
+            @foreach (var user in project.Users)
+            {
+                <dd class="col-sm-10">
+                    @user.FirstName
+                </dd>
+            }
+        }
+
+        <dt class="col-sm-2">
+            Tickets
+        </dt>
+        @if (project.Tickets != null)
+        {
+            <dd class="col-sm-10">
+                <TicketsTable Tickets="project.Tickets" />
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                <em>None</em>
+            </dd>
+        }
+
+    </dl>
+
+    <a class="btn btn-outline-secondary" href="projects/edit/@project.Id">
+        <span class="oi oi-pencil" aria-hidden="true"> Edit Project</span>
+    </a>
 }
 @code {
     [Parameter]

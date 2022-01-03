@@ -94,3 +94,5 @@ namespace ProjectManagementSystem.Models
         #endregion
     }
 }
+
+// reference: https://stackoverflow.com/a/1607352/11005638

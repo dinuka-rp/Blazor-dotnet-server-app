@@ -56,13 +56,14 @@
         <label for="user-select">Assigned User/s</label>
 
         @* show chips of already assigned users and allow to remove with - button *@
+        <ChosenEntitiesDiscsBox TEntity="ApplicationUser" EntityList="AssignedUsers" />
 
+    </div>
+    <div>
         <input type="search" id="user-select" class="form-control"
                @bind-value="userSearchInput" @bind-value:event="oninput"
                @onkeypress="@SearchUsers" placeholder="Search Users" />
-    </div>
-    <div>
-        <p></p>
+
         @* load users onenter in above search *@
         @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
     </div>
@@ -78,8 +79,8 @@
 
     private String userSearchInput = "";
     // TODO: check an appropriate method to assign a user/ multiple users
-    private String userIdToAdd;
-    private List<ApplicationUser> assignedUsers;
+    //private String userIdToAdd;
+    private List<ApplicationUser> AssignedUsers;
 
     List<Project> projects;
     private Guid chosenProjectId;
@@ -108,7 +109,7 @@
     protected async void HandleValidSubmit()
     {
         ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
-        ticket.Users = assignedUsers;
+        ticket.Users = AssignedUsers;
 
         await TicketService.InsertTicketAsync(ticket);
         Navigation.NavigateTo("project-board");

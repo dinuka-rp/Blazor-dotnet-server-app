@@ -31,7 +31,8 @@ namespace ProjectManagementSystem.Data
 
         public List<ApplicationUser> Users { get; set; }
 
-        //TODO: make this a required field?
+        //TODO: make this a required field? need to run a migration
+        //[Required]
         public Project Project { get; set; }
     }
 }

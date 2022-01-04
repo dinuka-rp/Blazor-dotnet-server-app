@@ -28,6 +28,14 @@ else
         <dd class="col-sm-10">@ticket.Status</dd>
 
         <dt class="col-sm-2">
+            Ticket Project
+        </dt>
+        <dd class="col-sm-10">
+            @ticket.Project.Name
+        </dd>
+
+
+        <dt class="col-sm-2">
             Assigned Users
         </dt>
         @if (ticket.Users == null)
@@ -46,6 +54,39 @@ else
             }
 
         }
+
+        @if (ticket.StartedOn != null)
+        {
+            <dt class="col-sm-2">
+                Started On
+            </dt>
+            <dd class="col-sm-10">
+                @ticket.StartedOn.Value.ToShortDateString()
+            </dd>
+            // reference: https://stackoverflow.com/a/6124299/11005638
+        }
+
+
+        @if (ticket.CompletedOn == null)
+        {
+            <dt class="col-sm-2">
+                Project Status
+            </dt>
+            <dd class="col-sm-10 text-danger">
+                Incomplete
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                Completed On
+            </dt>
+            <dd class="col-sm-10">
+                @ticket.CompletedOn.Value.ToShortDateString()
+            </dd>
+            // reference: https://stackoverflow.com/a/6124299/11005638
+        }
+
     </dl>
 
     <button class="btn btn-danger" @onclick="DeleteTicket">

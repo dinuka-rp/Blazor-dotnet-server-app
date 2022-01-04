@@ -1,0 +1,19 @@
+﻿<div class="btn btn-outline-info">
+    @DiscName <span class="oi oi-minus" aria-hidden="true" @onclick="Delete_Click"></span>
+</div>
+
+@code {
+    [Parameter]
+    public String DiscName { get; set; }
+
+    [Parameter]
+    public String DiscId { get; set; }
+
+    [Parameter]
+    public EventCallback<String> OnEntityUnassignedStr { get; set; }
+
+    protected async Task Delete_Click()
+    {
+        await OnEntityUnassignedStr.InvokeAsync(DiscId);
+    }
+}

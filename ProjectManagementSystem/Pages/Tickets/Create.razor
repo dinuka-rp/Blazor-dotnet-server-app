@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @inject TicketService TicketService
 @inject ProjectService ProjectService
+@inject UserService UserService
 
 <h3>Create Ticket</h3>
 <hr />
@@ -33,7 +34,6 @@
         </div>
     }
 
-
     <div class="form-group">
         <label for="description-input" class="control-label">* Ticket Description</label>
         <InputText id="description-input" class="form-control" @bind-Value="@ticket.Description"></InputText>
@@ -56,36 +56,52 @@
         <label for="user-select">Assigned User/s</label>
 
         @* show chips of already assigned users and allow to remove with - button *@
-        <ChosenEntitiesDiscsBox TEntity="ApplicationUser" EntityList="AssignedUsers" />
-
+        @*<ChosenEntitiesDiscsBox TEntity="ApplicationUser" EntityList="assignedUsers" OnEntityUnassignedStr="UnassignUser" />*@
+        <RemovableDiscStr DiscName="Hellooo" DiscId="101" OnEntityUnassignedStr="UnassignUser" />
+        <RemovableDiscStr DiscName="Hellooo" DiscId="101" OnEntityUnassignedStr="UnassignUser" />
+        <RemovableDiscStr DiscName="Hellooo" DiscId="101" OnEntityUnassignedStr="UnassignUser" />
     </div>
     <div>
-        <input type="search" id="user-select" class="form-control"
-               @bind-value="userSearchInput" @bind-value:event="oninput"
-               @onkeypress="@SearchUsers" placeholder="Search Users" />
-
+        <div class="d-md-flex">
+            <input type="search" id="user-select" class="form-control"
+                   @bind-value="searchInput"
+                   @onkeypress="@EnterSearch" placeholder="Search Users" />
+            <div class="btn btn-outline-primary" @onclick="HandleSearch">
+                <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
+            </div>
+            <div class="btn btn-outline-secondary" @onclick="ClearSearch">Clear Search</div>
+        </div>
         @* load users onenter in above search *@
-        @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
+        @if (users == null || users.Count == 0)
+        {
+            <p><em>@displayUsersMessage</em></p>
+        }
+        else
+        {
+            <SearchMultiSelect TEntity="ApplicationUser" EntityList="users"/>
+        }
     </div>
 
     <NavLink class="btn btn-outline-secondary" href="project-board">
         <span aria-hidden="true">Cancel</span>
     </NavLink>
-    <button type="submit" class="btn btn-primary">Create Ticket</button>
+    <button type="button" class="btn btn-primary">Create Ticket</button>
 </EditForm>
 
 @code {
     private Ticket ticket { get; set; } = new Ticket();
 
-    private String userSearchInput = "";
-    // TODO: check an appropriate method to assign a user/ multiple users
-    //private String userIdToAdd;
-    private List<ApplicationUser> AssignedUsers;
 
     List<Project> projects;
     private Guid chosenProjectId;
 
+    List<ApplicationUser> users;
+    private List<ApplicationUser> assignedUsers;
+
     public String displayProjectsMessage = "Loading Projects";
+    public String displayUsersMessage = "";
+
+    private String searchInput = "";
 
 
     protected override async Task OnInitializedAsync()
@@ -99,19 +115,58 @@
         }
     }
 
-    private void SearchUsers()
+
+    private async Task EnterSearch(KeyboardEventArgs eventArgs)
     {
-        //params - userSearchInput
-        //call user model with filter by name
-        //searchedUsers =
+        if (eventArgs.Key == "Enter")
+        {        // fire on enter
+            await HandleSearch();
+        }
+        else if (eventArgs.Key == "Escape")
+        {
+            await ClearSearch();
+        }
+    }
+
+    private async Task HandleSearch()
+    {
+        users = await UserService.SearchUsersAsync(searchInput);
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users with the name: " + searchInput + " were found.";
+        }
+    }
+
+    private async Task ClearSearch()
+    {
+        searchInput = "";
+        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users Found";
+        }
+    }
+
+    private void AssignUser(ApplicationUser user)
+    {
+        assignedUsers.Add(user);
     }
 
     protected async void HandleValidSubmit()
     {
         ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
-        ticket.Users = AssignedUsers;
+        ticket.Users = assignedUsers;
 
         await TicketService.InsertTicketAsync(ticket);
         Navigation.NavigateTo("project-board");
+    }
+
+    protected void UnassignUser(String id)
+    {
+        if (users != null)
+        {
+            ApplicationUser userToBeUnassigned = users.Find((user) => user.Id == id);
+            assignedUsers.Remove(userToBeUnassigned);
+        }
     }
 }

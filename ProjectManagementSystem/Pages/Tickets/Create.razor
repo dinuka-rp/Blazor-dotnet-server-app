@@ -56,10 +56,10 @@
         <label for="user-select">Assigned User/s</label>
 
         @* show chips of already assigned users and allow to remove with - button *@
-        @*<ChosenEntitiesDiscsBox TEntity="ApplicationUser" EntityList="assignedUsers" OnEntityUnassignedStr="UnassignUser" />*@
-        <RemovableDiscStr DiscName="Hellooo" DiscId="101" OnEntityUnassignedStr="UnassignUser" />
-        <RemovableDiscStr DiscName="Hellooo" DiscId="101" OnEntityUnassignedStr="UnassignUser" />
-        <RemovableDiscStr DiscName="Hellooo" DiscId="101" OnEntityUnassignedStr="UnassignUser" />
+        @foreach (var assignedUser in assignedUsers)
+        {
+            <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+        }
     </div>
     <div>
         <div class="d-md-flex">
@@ -78,7 +78,7 @@
         }
         else
         {
-            <SearchMultiSelect TEntity="ApplicationUser" EntityList="users"/>
+            <UsersTable Users="users" Assignable="true" OnAssignUser="AssignUser" />
         }
     </div>
 
@@ -147,18 +147,10 @@
         }
     }
 
-    private void AssignUser(ApplicationUser user)
+    protected void AssignUser(String id)
     {
-        assignedUsers.Add(user);
-    }
-
-    protected async void HandleValidSubmit()
-    {
-        ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
-        ticket.Users = assignedUsers;
-
-        await TicketService.InsertTicketAsync(ticket);
-        Navigation.NavigateTo("project-board");
+        ApplicationUser userToBeAssigned = users.Find((user) => user.Id == id);
+        assignedUsers.Add(userToBeAssigned);
     }
 
     protected void UnassignUser(String id)
@@ -168,5 +160,16 @@
             ApplicationUser userToBeUnassigned = users.Find((user) => user.Id == id);
             assignedUsers.Remove(userToBeUnassigned);
         }
+    }
+
+    protected async void HandleValidSubmit()
+    {
+        ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
+
+        if (assignedUsers != null && assignedUsers.Count > 0)
+            ticket.Users = assignedUsers;
+
+        await TicketService.InsertTicketAsync(ticket);
+        Navigation.NavigateTo("project-board");
     }
 }

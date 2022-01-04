@@ -37,9 +37,9 @@
 
                     @if (Assignable)
                     {
-                        @*<td @onclick="()=>AddEntityToList(entity)">
-                                <span class="oi oi-plus" aria-hidden="true"> Assign User</span>
-                            </td>*@
+                        <td @onclick="()=>AssignUser_Click(user.Id)">
+                            <span class="oi oi-plus" aria-hidden="true"> Assign User</span>
+                        </td>
                     }
                     else
                     {
@@ -69,4 +69,12 @@
 
     [Parameter]
     public Boolean Assignable { get; set; }
+
+    [Parameter]
+    public EventCallback<String> OnAssignUser { get; set; }
+
+    protected async Task AssignUser_Click(String Id)
+    {
+        await OnAssignUser.InvokeAsync(Id);
+    }
 }

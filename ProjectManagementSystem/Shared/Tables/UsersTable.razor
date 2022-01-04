@@ -35,18 +35,27 @@
                         </td>
                     }
 
-                    <td>
-                        @* TODO: style add padding *@
-                        <a class="" href="users/edit/@user.Id">
-                            <span class="oi oi-pencil" aria-hidden="true"></span>
-                        </a>
-                        <a class="" href="users/details/@user.Id">
-                            <span class="oi oi-document" aria-hidden="true"></span>
-                        </a>
-                        <a class="text-danger" href="users/delete/@user.Id">
-                            <span class="oi oi-trash" aria-hidden="true"></span>
-                        </a>
-                    </td>
+                    @if (Assignable)
+                    {
+                        <td @onclick="()=>AssignUser_Click(user.Id)">
+                            <span class="oi oi-plus" aria-hidden="true"> Assign User</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @* TODO: style add padding *@
+                            <a class="" href="users/edit/@user.Id">
+                                <span class="oi oi-pencil" aria-hidden="true"></span>
+                            </a>
+                            <a class="" href="users/details/@user.Id">
+                                <span class="oi oi-document" aria-hidden="true"></span>
+                            </a>
+                            <a class="text-danger" href="users/delete/@user.Id">
+                                <span class="oi oi-trash" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
@@ -57,4 +66,15 @@
 @code {
     [Parameter]
     public List<ApplicationUser> Users { get; set; }
+
+    [Parameter]
+    public Boolean Assignable { get; set; }
+
+    [Parameter]
+    public EventCallback<String> OnAssignUser { get; set; }
+
+    protected async Task AssignUser_Click(String Id)
+    {
+        await OnAssignUser.InvokeAsync(Id);
+    }
 }

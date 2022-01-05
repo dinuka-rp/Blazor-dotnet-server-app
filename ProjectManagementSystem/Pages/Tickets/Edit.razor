@@ -59,16 +59,19 @@ else
             <ValidationMessage For="@(() => ticket.Status)" />
         </div>
 
-        <label for="user-select">Assigned User/s</label>
-
-        @* show chips of already assigned users and allow to remove with - button *@
-        @if (assignedUsers != null)
-        {
-            @foreach (var assignedUser in assignedUsers)
+        <div>
+            <label for="user-select">Assigned User/s</label>
+        </div>
+        <div>
+            @* show chips of already assigned users and allow to remove with - button *@
+            @if (assignedUsers != null)
             {
-                <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+                @foreach (var assignedUser in assignedUsers)
+                {
+                    <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+                }
             }
-        }
+        </div>
         <div>
             <div class="d-md-flex">
                 <input type="search" id="user-select" class="form-control"
@@ -142,12 +145,6 @@ else
         {
             displayProjectsMessage = "No Projects found, please create a project first in the Projects page.";
         }
-
-        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
-        if (users.Count == 0)
-        {
-            displayUsersMessage = "No Users Found";
-        }
     }
 
     private async Task EnterSearch(KeyboardEventArgs eventArgs)
@@ -203,7 +200,7 @@ else
     private async Task UpdateTicket()
     {
         ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
-        
+
         if (assignedUsers != null && assignedUsers.Count > 0)
             ticket.Users = assignedUsers;
 

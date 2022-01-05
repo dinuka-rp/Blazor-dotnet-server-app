@@ -52,9 +52,11 @@
         </InputSelect>
         <ValidationMessage For="@(()=>ticket.Status)" />
     </div>
+
     <div>
         <label for="user-select">Assigned User/s</label>
-
+    </div>
+    <div>
         @* show chips of already assigned users and allow to remove with - button *@
         @if (assignedUsers != null)
         {
@@ -101,8 +103,8 @@
     List<ApplicationUser> users;
     private List<ApplicationUser> assignedUsers = new List<ApplicationUser>();
 
-    public String displayProjectsMessage = "Loading Projects";
-    public String displayUsersMessage = "";
+    private String displayProjectsMessage = "Loading Projects";
+    private String displayUsersMessage = "";
 
     private String searchInput = "";
 

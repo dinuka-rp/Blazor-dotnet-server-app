@@ -55,7 +55,7 @@ else
         <dt class="col-sm-2">
             Assigned Users
         </dt>
-        @if (project.Users == null)
+        @if (project.Users == null || project.Users.Count == 0)
         {
             <dd class="col-sm-10">
                 <em>None</em>
@@ -63,10 +63,10 @@ else
         }
         else
         {
-            @foreach (var user in project.Users)
+            @if (project.Users != null)
             {
                 <dd class="col-sm-10">
-                    @user.FirstName
+                    <UsersTable Users="project.Users" />
                 </dd>
             }
         }

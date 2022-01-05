@@ -53,7 +53,10 @@ namespace ProjectManagementSystem.Models
             c.LastName.ToLower().Contains(trimmedSearchTerm) ||
             c.Email.ToLower().Contains(trimmedSearchTerm) ||
             c.UserName.ToLower().Contains(trimmedSearchTerm)
-            ).ToListAsync();
+            )
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .ToListAsync();
         }
         #endregion
 

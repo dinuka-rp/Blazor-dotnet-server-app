@@ -50,28 +50,40 @@
         </div>
     }
 
-    @if (users == null)
-    {
-        <div>
+    <div>
+        <label for="user-select">Assigned User/s</label>
+    </div>
+    <div>
+        @* show chips of already assigned users and allow to remove with - button *@
+        @if (assignedUsers != null)
+        {
+            @foreach (var assignedUser in assignedUsers)
+            {
+                <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+            }
+        }
+    </div>
+    <div>
+        <div class="d-md-flex">
+            <input type="search" id="user-select" class="form-control"
+                   @bind-value="searchInput"
+                   @onkeypress="@EnterSearch" placeholder="Search Users" />
+            <div class="btn btn-outline-primary" @onclick="HandleSearch">
+                <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
+            </div>
+            <div class="btn btn-outline-secondary" @onclick="ClearSearch">Clear Search</div>
+        </div>
+
+        @* load users onenter in above search *@
+        @if (users == null || users.Count == 0)
+        {
             <p><em>@displayUsersMessage</em></p>
-        </div>
-    }
-    else
-    {
-        <div>
-            @*<div>
-                    <label for="user-select">Assigned User/s</label>
-                    <input type="search" id="user-select" class="form-control"
-                           @bind-value="searchInput" @bind-value:event="oninput"
-                           @onkeydown="@SearchUsers" placeholder="Search " />
-                </div>*@
-
-            @* load users onenter in above search *@
-
-            @* add users to project from here? *@
-        </div>
-    }
-
+        }
+        else
+        {
+            <UsersTable Users="users" Assignable="true" OnAssignUser="AssignUser" />
+        }
+    </div>
 
     <NavLink class="btn btn-outline-secondary" href="projects">
         <span aria-hidden="true">Cancel</span>
@@ -88,10 +100,11 @@
     private List<ApplicationUser> users { get; set; }
     private List<ApplicationUser> assignedUsers { get; set; }
 
-    //public String searchInput { get; set; }
-
     public String displayCompanyMessage = "Loading Companies";
-    public String displayUsersMessage = "Loading Users";
+    private String displayUsersMessage = "";
+
+    private String searchInput = "";
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -103,18 +116,67 @@
             displayCompanyMessage = "No Companies found, please create a company first in the Companies page.";
         }
 
-        //TODO: create User search using LINQ - Check Company index's search
-        //users = await Task.Run(() => UserService.GetSearchedUsersAsync());
-        //if (users == null)
-        //{
-        //    displayUsersMessage = "No Users found";
-        //}
+        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
+        if (users == null)
+        {
+            displayUsersMessage = "No Users found, please register a user.";
+        }
+    }
+
+    private async Task EnterSearch(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+        {        // fire on enter
+            await HandleSearch();
+        }
+        else if (eventArgs.Key == "Escape")
+        {
+            await ClearSearch();
+        }
+    }
+
+    private async Task HandleSearch()
+    {
+        users = await UserService.SearchUsersAsync(searchInput);
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users with the name: " + searchInput + " were found.";
+        }
+    }
+
+    private async Task ClearSearch()
+    {
+        searchInput = "";
+        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users Found";
+        }
+    }
+
+    protected void AssignUser(String id)
+    {
+        ApplicationUser userToBeAssigned = users.Find((user) => user.Id == id);
+
+        if (!assignedUsers.Contains(userToBeAssigned))
+            assignedUsers.Add(userToBeAssigned);
+    }
+
+    protected void UnassignUser(String id)
+    {
+        if (users != null)
+        {
+            ApplicationUser userToBeUnassigned = users.Find((user) => user.Id == id);
+            if (assignedUsers.Contains(userToBeUnassigned))
+                assignedUsers.Remove(userToBeUnassigned);
+        }
     }
 
     protected async void HandleValidSubmit()
     {
         project.Company = companies.Find((company) => company.Id == chosenCompanyId);
-        project.Users = assignedUsers;
+        if (assignedUsers != null && assignedUsers.Count > 0)
+            project.Users = assignedUsers;
 
         await ProjectService.InsertProjectAsync(project);
         Navigation.NavigateTo("projects");

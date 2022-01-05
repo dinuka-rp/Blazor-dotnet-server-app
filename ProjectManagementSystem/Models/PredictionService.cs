@@ -24,8 +24,8 @@ namespace ProjectManagementSystem.Models
         public async Task<PredictionDTO> GeneratePrediction(DateTime predictionDate)
         {
 
-            Int32 daysDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0);
-            Int32 monthDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0) / 30;
+            //Int32 daysDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0);
+            //Int32 monthDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0) / 30;
             DateTime pastDate = predictionDate.Subtract(predictionDate - DateTime.Now);
 
             // use LINQ - to get required details here
@@ -50,14 +50,14 @@ namespace ProjectManagementSystem.Models
 
             // ------- Projects per company prediction
 
-            Int32 expectedIncreaseInProjectsPerMonth = (projectsInCurrentMonth.Count - projectsInPastNMonth.Count) / monthDiff;
-            Int32 expectedIncreaseInCompaniesPerMonth = (companiesInCurrentMonth.Count - companiesInNMonth.Count) / monthDiff;
+            Int32 expectedChangeInProjectsPerMonth = projectsInCurrentMonth.Count - projectsInPastNMonth.Count;
+            Int32 expectedChangeInCompaniesPerMonth = companiesInCurrentMonth.Count - companiesInNMonth.Count;
 
             // prediction calculation
             Int32? projectsPerCompanyPrediction;
 
-            Int32 predictedTotalCompanies = projectsInCurrentMonth.Count + (expectedIncreaseInProjectsPerMonth * monthDiff);
-            Int32 predictedTotalProjects = companiesInCurrentMonth.Count + (expectedIncreaseInCompaniesPerMonth * monthDiff);
+            Int32 predictedTotalCompanies = projectsInCurrentMonth.Count + expectedChangeInProjectsPerMonth;
+            Int32 predictedTotalProjects = companiesInCurrentMonth.Count + expectedChangeInCompaniesPerMonth;
 
             if (predictedTotalCompanies == 0)
             {
@@ -92,12 +92,12 @@ namespace ProjectManagementSystem.Models
 
             // ------- Users per project prediction
 
-            Int32 expectedIncreaseInUsersPerProject = (usersInCurrentMonth.Count - usersInPastNMonth.Count) / monthDiff;
+            Int32 expectedChangeInUsersPerProject = usersInCurrentMonth.Count - usersInPastNMonth.Count;
 
             // prediction calculation
             Int32? peoplePerProjectPrediction;
 
-            Int32 predictedTotalUsers = usersInCurrentMonth.Count * expectedIncreaseInUsersPerProject;
+            Int32 predictedTotalUsers = usersInCurrentMonth.Count + expectedChangeInUsersPerProject;
 
             if (predictedTotalProjects == 0)
             {

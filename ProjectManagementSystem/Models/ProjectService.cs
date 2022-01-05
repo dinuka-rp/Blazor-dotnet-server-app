@@ -35,11 +35,15 @@ namespace ProjectManagementSystem.Models
             return true;
         }
         #endregion
-        
+
         #region Get Project by Id
         public async Task<Project> GetProjectAsync(Guid Id)
         {
-            Project project = await _applicationDbContext.Projects.FindAsync(Id);
+            Project project = await _applicationDbContext.Projects
+                .Include(r => r.Company)
+                .Include(r => r.Tickets).ThenInclude(r=>r.Users)
+                .Include(r => r.Users)
+                .FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return project;
         }
         #endregion

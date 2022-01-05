@@ -56,9 +56,12 @@
         <label for="user-select">Assigned User/s</label>
 
         @* show chips of already assigned users and allow to remove with - button *@
-        @foreach (var assignedUser in assignedUsers)
+        @if (assignedUsers != null)
         {
-            <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+            @foreach (var assignedUser in assignedUsers)
+            {
+                <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+            }
         }
     </div>
     <div>
@@ -85,7 +88,7 @@
     <NavLink class="btn btn-outline-secondary" href="project-board">
         <span aria-hidden="true">Cancel</span>
     </NavLink>
-    <button type="button" class="btn btn-primary">Create Ticket</button>
+    <button type="submit" class="btn btn-primary">Create Ticket</button>
 </EditForm>
 
 @code {
@@ -96,7 +99,7 @@
     private Guid chosenProjectId;
 
     List<ApplicationUser> users;
-    private List<ApplicationUser> assignedUsers;
+    private List<ApplicationUser> assignedUsers = new List<ApplicationUser>();
 
     public String displayProjectsMessage = "Loading Projects";
     public String displayUsersMessage = "";
@@ -150,7 +153,9 @@
     protected void AssignUser(String id)
     {
         ApplicationUser userToBeAssigned = users.Find((user) => user.Id == id);
-        assignedUsers.Add(userToBeAssigned);
+
+        if (!assignedUsers.Contains(userToBeAssigned))
+            assignedUsers.Add(userToBeAssigned);
     }
 
     protected void UnassignUser(String id)
@@ -158,7 +163,8 @@
         if (users != null)
         {
             ApplicationUser userToBeUnassigned = users.Find((user) => user.Id == id);
-            assignedUsers.Remove(userToBeUnassigned);
+            if (assignedUsers.Contains(userToBeUnassigned))
+                assignedUsers.Remove(userToBeUnassigned);
         }
     }
 

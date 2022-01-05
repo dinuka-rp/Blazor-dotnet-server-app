@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @inject TicketService TicketService
 @inject ProjectService ProjectService
+@inject UserService UserService
 
 <h3>Edit Ticket</h3>
 <hr />
@@ -32,7 +33,7 @@ else
                 <InputSelect id="project-select" class="custom-select" @bind-Value="@chosenProjectId">
                     @foreach (var project in projects)
                             {
-                        <option selected value="@project.Id">@project.Name</option>
+                        <option value="@project.Id">@project.Name</option>
                             }
                 </InputSelect>
                 <ValidationMessage For="@(()=>ticket.Project)" />
@@ -58,16 +59,35 @@ else
             <ValidationMessage For="@(() => ticket.Status)" />
         </div>
 
-        @* Think about a good way to display this \/ *@
-        @*<div>
-                <label for="user-select">Assigned User/s</label>
-                <input type="search" id="user-select" class="form-control"
-                       @bind-value="userSearchInput" @bind-value:event="oninput"
-                       @onkeydown="@SearchUsers" placeholder="Choose User" />
-            </div>*@
+        <label for="user-select">Assigned User/s</label>
+
+        @* show chips of already assigned users and allow to remove with - button *@
+        @if (assignedUsers != null)
+        {
+            @foreach (var assignedUser in assignedUsers)
+            {
+                <RemovableDiscStr DiscName="@assignedUser.UserName" DiscId="@assignedUser.Id" OnEntityUnassignedStr="UnassignUser" />
+            }
+        }
         <div>
+            <div class="d-md-flex">
+                <input type="search" id="user-select" class="form-control"
+                       @bind-value="searchInput"
+                       @onkeypress="@EnterSearch" placeholder="Search Users" />
+                <div class="btn btn-outline-primary" @onclick="HandleSearch">
+                    <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
+                </div>
+                <div class="btn btn-outline-secondary" @onclick="ClearSearch">Clear Search</div>
+            </div>
             @* load users onenter in above search *@
-            @*@bind-value="userIdToAdd" @bind-value:event="oninput"*@
+            @if (users == null || users.Count == 0)
+            {
+                <p><em>@displayUsersMessage</em></p>
+            }
+            else
+            {
+                <UsersTable Users="users" Assignable="true" OnAssignUser="AssignUser" />
+            }
         </div>
 
         <NavLink class="btn btn-outline-secondary" href="project-board">
@@ -87,10 +107,17 @@ else
     List<Project> projects;
     private Guid chosenProjectId;
 
+
+    List<ApplicationUser> users;
+    private List<ApplicationUser> assignedUsers = new List<ApplicationUser>();
+
+
     public String displayProjectsMessage = "Loading Projects";
+    public String displayUsersMessage = "";
+
+    private String searchInput = "";
 
     protected override async Task OnInitializedAsync()
-    // any logic/ code needs to go in methods
     {
         base.OnInitialized();
 
@@ -105,17 +132,80 @@ else
             chosenProjectId = ticket.Project.Id;
         }
 
+        if (ticket.Users != null)
+        {
+            assignedUsers = ticket.Users;
+        }
 
         projects = await Task.Run(() => ProjectService.GetAllProjectsAsync());
         if (projects == null)
         {
             displayProjectsMessage = "No Projects found, please create a project first in the Projects page.";
         }
+
+        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users Found";
+        }
+    }
+
+    private async Task EnterSearch(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+        {        // fire on enter
+            await HandleSearch();
+        }
+        else if (eventArgs.Key == "Escape")
+        {
+            await ClearSearch();
+        }
+    }
+
+    private async Task HandleSearch()
+    {
+        users = await UserService.SearchUsersAsync(searchInput);
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users with the name: " + searchInput + " were found.";
+        }
+    }
+
+    private async Task ClearSearch()
+    {
+        searchInput = "";
+        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
+        if (users.Count == 0)
+        {
+            displayUsersMessage = "No Users Found";
+        }
+    }
+
+    protected void AssignUser(String id)
+    {
+        ApplicationUser userToBeAssigned = users.Find((user) => user.Id == id);
+
+        if (!assignedUsers.Contains(userToBeAssigned))
+            assignedUsers.Add(userToBeAssigned);
+    }
+
+    protected void UnassignUser(String id)
+    {
+        Console.WriteLine("UnassignUser: ", id);
+        if (users != null)
+        {
+            ApplicationUser userToBeUnassigned = users.Find((user) => user.Id == id);
+            if (assignedUsers.Contains(userToBeUnassigned))
+                assignedUsers.Remove(userToBeUnassigned);
+        }
     }
 
     private async Task UpdateTicket()
     {
         ticket.Project = projects.Find((project) => project.Id == chosenProjectId);
+        
+        if (assignedUsers != null && assignedUsers.Count > 0)
+            ticket.Users = assignedUsers;
 
         await TicketService.UpdateTicketAsync(ticket);
         Navigation.NavigateTo("project-board");

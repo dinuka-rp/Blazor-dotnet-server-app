@@ -24,7 +24,7 @@ namespace ProjectManagementSystem.Models
         #region Get List of Tickets
         public async Task<List<Ticket>> GetAllTicketsAsync()
         {
-            return await _applicationDbContext.Tickets.ToListAsync();
+            return await _applicationDbContext.Tickets.Include(r => r.Project).Include(r => r.Users).ToListAsync();
         }
         #endregion
 
@@ -58,7 +58,7 @@ namespace ProjectManagementSystem.Models
         #region Get Ticket by Id
         public async Task<Ticket> GetTicketAsync(Guid Id)
         {
-            Ticket ticket = await _applicationDbContext.Tickets.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            Ticket ticket = await _applicationDbContext.Tickets.Include(r => r.Project).Include(r => r.Users).FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return ticket;
         }
         #endregion

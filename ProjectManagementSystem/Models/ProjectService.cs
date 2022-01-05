@@ -27,6 +27,17 @@ namespace ProjectManagementSystem.Models
         }
         #endregion
 
+        #region Get Projects by Project Search name
+        public async Task<List<Project>> SearchProjectsAsync(String searchTerm)
+        {
+            String trimmedSearchTerm = searchTerm.Trim().ToLower();
+
+            return await _applicationDbContext.Projects.Where(c =>
+                c.Name.ToLower().Contains(trimmedSearchTerm)
+            ).ToListAsync();
+        }
+        #endregion
+
         #region Insert Project
         public async Task<bool> InsertProjectAsync(Project project)
         {

@@ -3,6 +3,7 @@
 @attribute [Authorize(Roles = "Admin")]
 @inject NavigationManager Navigation
 @inject CompanyService CompanyService
+@inject ProjectService ProjectService
 
 <h3>Create Company</h3>
 <hr/>
@@ -18,9 +19,39 @@
     </div>
 
     <div>
-        @* load projects onenter in above search *@
-        @*@bind-value="projectIdToAdd" @bind-value:event="oninput"*@
+        <label for="project-select">Assigned Project/s</label>
     </div>
+    <div>
+        @* show chips of already assigned projects and allow to remove with - button *@
+        @if (assignedProjects != null)
+        {
+            @foreach (var assignedProject in assignedProjects)
+            {
+                <RemovableDiscGuid DiscName="@assignedProject.Name" DiscId="@assignedProject.Id" OnEntityUnassignedGuid="UnassignProject" />
+            }
+        }
+    </div>
+    <div>
+        <div class="d-md-flex">
+            <input type="search" id="project-select" class="form-control"
+                   @bind-value="searchInput"
+                   @onkeypress="@EnterSearch" placeholder="Search Users" />
+            <div class="btn btn-outline-primary" @onclick="HandleSearch">
+                <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
+            </div>
+            <div class="btn btn-outline-secondary" @onclick="ClearSearch">Clear Search</div>
+        </div>
+        @* load users onenter in above search *@
+        @if (projects == null || projects.Count == 0)
+        {
+            <p><em>@displayProjectsMessage</em></p>
+        }
+        else
+        {
+            <ProjectsTable Projects="projects" Assignable="true" OnAssignProject="AssignProject" />
+        }
+    </div>
+
 
     <NavLink class="btn btn-outline-secondary" href="companies">
         <span aria-hidden="true">Cancel</span>
@@ -32,8 +63,70 @@
 @code {
     private Company company { get; set; } = new Company();
 
+    List<Project> projects;
+    private List<Project> assignedProjects = new List<Project>();
+
+    private String displayProjectsMessage = "";
+
+    private String searchInput = "";
+
+
+    private async Task EnterSearch(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+        {        // fire on enter
+            await HandleSearch();
+        }
+        else if (eventArgs.Key == "Escape")
+        {
+            ClearSearch();
+        }
+    }
+
+    private async Task HandleSearch()
+    {
+        projects = await ProjectService.SearchProjectsAsync(searchInput);
+        if (projects.Count == 0)
+        {
+            displayProjectsMessage = "No Projects with the name: " + searchInput + " were found.";
+        }
+    }
+
+    private void ClearSearch()
+    {
+        searchInput = "";
+        displayProjectsMessage = "";
+        projects = null;
+        //projects = await Task.Run(() => ProjectService.GetAllProjects());
+        //if (projects.Count == 0)
+        //{
+        //    displayProjectsMessage = "No Users Found";
+        //}
+    }
+
+    protected void AssignProject(Guid id)
+    {
+        Project projectToBeAssigned = projects.Find((project) => project.Id == id);
+
+        if (!assignedProjects.Contains(projectToBeAssigned))
+            assignedProjects.Add(projectToBeAssigned);
+    }
+
+    protected void UnassignProject(Guid id)
+    {
+        if (projects != null)
+        {
+            Project projectToBeUnassigned = projects.Find((project) => project.Id == id);
+            if (assignedProjects.Contains(projectToBeUnassigned))
+                assignedProjects.Remove(projectToBeUnassigned);
+        }
+    }
+
     protected async void HandleValidSubmit()
     {
+        if (assignedProjects != null && assignedProjects.Count > 0)
+            company.Projects = assignedProjects;
+
         await CompanyService.InsertCompanyAsync(company);
         Navigation.NavigateTo("companies");
     }

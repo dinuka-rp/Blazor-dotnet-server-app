@@ -129,7 +129,7 @@
         }
         else if (eventArgs.Key == "Escape")
         {
-            await ClearSearch();
+            ClearSearch();
         }
     }
 
@@ -145,11 +145,13 @@
     private async Task ClearSearch()
     {
         searchInput = "";
-        users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
-        if (users.Count == 0)
-        {
-            displayUsersMessage = "No Users Found";
-        }
+        displayUsersMessage = "";
+        users = null;
+        //users = await Task.Run(() => UserService.GetAllUsersWithRolesAsync());
+        //if (users.Count == 0)
+        //{
+        //    displayUsersMessage = "No Users Found";
+        //}
     }
 
     protected void AssignUser(String id)

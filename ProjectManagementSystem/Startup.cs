@@ -48,6 +48,7 @@ namespace ProjectManagementSystem
             services.AddScoped<UserService>();
             services.AddScoped<ProjectService>();
             services.AddScoped<ReportService>();
+            services.AddScoped<PredictionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

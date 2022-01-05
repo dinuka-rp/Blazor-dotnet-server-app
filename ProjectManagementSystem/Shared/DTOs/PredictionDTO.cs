@@ -7,7 +7,7 @@ namespace ProjectManagementSystem.Data
 {
     public class PredictionDTO
     {
-        public Int32 ProjectsPerCompany { get; set; }
-        public Int32 PeoplePerProject { get; set; }
+        public Int32? ProjectsPerCompany { get; set; }
+        public Int32? PeoplePerProject { get; set; }
     }
 }

@@ -23,9 +23,10 @@ namespace ProjectManagementSystem.Models
         #region Get Prediction
         public async Task<PredictionDTO> GeneratePrediction(DateTime predictionDate)
         {
-            Int32 dateDiff = (Int32)(predictionDate - DateTime.Now).TotalDays;
-            DateTime pastDate = predictionDate.Subtract(predictionDate - DateTime.Now);
 
+            Int32 daysDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0);
+            Int32 monthDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0) / 30;
+            DateTime pastDate = predictionDate.Subtract(predictionDate - DateTime.Now);
 
             // use LINQ - to get required details here
             // TODO: check if the logic to get the projects is correct here
@@ -47,15 +48,28 @@ namespace ProjectManagementSystem.Models
                 companiesInNMonth.Add(project.Company);
             }
 
-            // Projects per company prediction
-            Int32 projectsPerCompanyCurrent = projectsInCurrentMonth.Count / companiesInCurrentMonth.Count;
-            Int32 projectsPerCompanyNMonth = projectsInPastNMonth.Count / companiesInNMonth.Count;
+            // ------- Projects per company prediction
 
-
-            Int32 expectedIncreaseInProjectsPerCompany = (projectsPerCompanyCurrent - projectsPerCompanyNMonth) / dateDiff;
+            Int32 expectedIncreaseInProjectsPerMonth = (projectsInCurrentMonth.Count - projectsInPastNMonth.Count) / monthDiff;
+            Int32 expectedIncreaseInCompaniesPerMonth = (companiesInCurrentMonth.Count - companiesInNMonth.Count) / monthDiff;
 
             // prediction calculation
-            Int32 projectsPerCompanyPrediction = projectsPerCompanyCurrent * expectedIncreaseInProjectsPerCompany;
+            Int32? projectsPerCompanyPrediction;
+
+            Int32 predictedTotalCompanies = projectsInCurrentMonth.Count + (expectedIncreaseInProjectsPerMonth * monthDiff);
+            Int32 predictedTotalProjects = companiesInCurrentMonth.Count + (expectedIncreaseInCompaniesPerMonth * monthDiff);
+
+            if (predictedTotalCompanies == 0)
+            {
+                // avoid divide by zero error
+                projectsPerCompanyPrediction = null;
+            }
+            else
+            {
+                projectsPerCompanyPrediction = predictedTotalCompanies / predictedTotalCompanies;
+            }
+
+
 
             // ---------------
             HashSet<ApplicationUser> usersInCurrentMonth = new();
@@ -76,14 +90,24 @@ namespace ProjectManagementSystem.Models
                 }
             }
 
-            // Users per project prediction
-            Int32 usersPerProjectCurrent = usersInCurrentMonth.Count / projectsInCurrentMonth.Count;
-            Int32 usersPerProjectNMonth = usersInPastNMonth.Count / projectsInPastNMonth.Count;
+            // ------- Users per project prediction
 
-            Int32 expectedIncreaseInUsersPerProject = (usersPerProjectCurrent - usersPerProjectNMonth) / dateDiff;
+            Int32 expectedIncreaseInUsersPerProject = (usersInCurrentMonth.Count - usersInPastNMonth.Count) / monthDiff;
 
             // prediction calculation
-            Int32 peoplePerProjectPrediction = usersPerProjectCurrent * expectedIncreaseInUsersPerProject;
+            Int32? peoplePerProjectPrediction;
+
+            Int32 predictedTotalUsers = usersInCurrentMonth.Count * expectedIncreaseInUsersPerProject;
+
+            if (predictedTotalProjects == 0)
+            {
+                // avoid divide by zero error
+                peoplePerProjectPrediction = null;
+            }
+            else
+            {
+                peoplePerProjectPrediction = predictedTotalUsers / predictedTotalProjects;
+            }
 
             return new PredictionDTO
             {

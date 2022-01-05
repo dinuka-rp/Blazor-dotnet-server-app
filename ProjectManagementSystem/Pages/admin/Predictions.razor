@@ -1,9 +1,70 @@
 ﻿@page "/predictions"
 
 @attribute [Authorize(Roles = "Admin")]
+@inject PredictionService PredictionService
 
 <h3>Predictions</h3>
 
-@code {
+<div class="d-md-flex">
+    <div class='col-md-3'>
+        <div class="form-group">
+            <div class="input-group date">
+                <label for="prediction-date-input">Prediction date: </label>
+                <input type="date" id="prediction-date-input" name="Prediction Date"
+                       min="@DateTime.Now.Date.AddDays(1).ToString("yyyy-MM-dd")" @bind-value="@predictionDate">
+            </div>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <button class="btn btn-primary" @onclick="GeneratePredictions">
+            Make Prediction
+        </button>
+    </div>
+</div>
 
+<hr />
+
+@if (prediction == null)
+{
+    <p><em>Please Select a Date and Click on <strong>Make Prediction</strong></em></p>
+}
+else
+{
+    <div>
+        <dl class="row">
+            <dt class="col-sm-3">Number of Expected People Required Per Project</dt>
+            @if (prediction.PeoplePerProject == null)
+            {
+                <dd class="text-black-50"><em>The system does not have sufficient data to make this prediction at the moment.</em></dd>
+            }
+            else
+            {
+                <dd class="col-sm-5">@prediction.PeoplePerProject</dd>
+            }
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-3">Number of Projects Expected Per Company</dt>
+            @if (prediction.ProjectsPerCompany == null)
+            {
+                <dd class="text-black-50"><em>The system does not have sufficient data to make this prediction at the moment.</em></dd>
+            }
+            else
+            {
+                <dd class="col-sm-5">@prediction.ProjectsPerCompany</dd>
+            }
+        </dl>
+
+        @*Extra: Have a chart to show increase/ decrease in results, compared to now and past data*@
+    </div>
+}
+
+@code {
+    private DateTime predictionDate = DateTime.Now.Date.AddDays(1);
+
+    private PredictionDTO prediction;
+
+    private async Task GeneratePredictions()
+    {
+        prediction = await Task.Run(() => PredictionService.GeneratePrediction(predictionDate));
+    }
 }

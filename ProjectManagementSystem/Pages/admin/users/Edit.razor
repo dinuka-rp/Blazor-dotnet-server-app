@@ -68,7 +68,7 @@
         <div class="d-md-flex">
             <input type="search" id="project-select" class="form-control"
                    @bind-value="searchInput"
-                   @onkeypress="@EnterSearch" placeholder="Search Users" />
+                   @onkeypress="@EnterSearch" placeholder="Search Projects" />
             <div class="btn btn-outline-primary" @onclick="HandleSearch">
                 <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
             </div>
@@ -169,12 +169,9 @@
 
     protected void UnassignProject(Guid id)
     {
-        if (projects != null)
-        {
-            Project projectToBeUnassigned = projects.Find((project) => project.Id == id);
-            if (assignedProjects.Contains(projectToBeUnassigned))
-                assignedProjects.Remove(projectToBeUnassigned);
-        }
+        Project projectToBeUnassigned = assignedProjects.Find((project) => project.Id == id);
+        if (assignedProjects.Contains(projectToBeUnassigned))
+            assignedProjects.Remove(projectToBeUnassigned);
     }
 
     protected async void UpdateUser()

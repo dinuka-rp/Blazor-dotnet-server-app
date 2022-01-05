@@ -164,12 +164,9 @@
 
     protected void UnassignUser(String id)
     {
-        if (users != null)
-        {
-            ApplicationUser userToBeUnassigned = users.Find((user) => user.Id == id);
-            if (assignedUsers.Contains(userToBeUnassigned))
-                assignedUsers.Remove(userToBeUnassigned);
-        }
+        ApplicationUser userToBeUnassigned = assignedUsers.Find((user) => user.Id == id);
+        if (assignedUsers.Contains(userToBeUnassigned))
+            assignedUsers.Remove(userToBeUnassigned);
     }
 
     protected async void HandleValidSubmit()

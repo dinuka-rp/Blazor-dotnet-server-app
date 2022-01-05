@@ -1,6 +1,5 @@
 ﻿@page "/"
 
-@attribute [Authorize]
 @inject NavigationManager Navigation
 
 
@@ -9,7 +8,15 @@
 <h5>Welcome to Project Management!</h5>
 
 <hr />
-<div><p>Click <a href="/project-board">here</a> to view the Project Board.</p></div>
+
+<AuthorizeView>
+    <Authorized>
+        <div><p>Click <a href="/project-board">here</a> to view the Project Board.</p></div>
+    </Authorized>
+    <NotAuthorized>
+        <div><p class="text-black-50"><em>If you are unable to access all functionalities of the project-board, please contact an admin of the system, requesting an account to login to the Project Management System with a relevant user-role.</em></p></div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private String greetingtxt;

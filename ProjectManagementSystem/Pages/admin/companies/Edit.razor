@@ -24,25 +24,6 @@ else
             <ValidationMessage For="@(()=>company.Name)" />
         </div>
 
-        <dt class="col-sm-2">
-            Assigned Projects
-        </dt>
-        @if (company.Projects == null)
-        {
-            <dd class="col-sm-10">
-                <em>None</em>
-            </dd>
-        }
-        else
-        {
-            @foreach (var project in company.Projects)
-            {
-                <dd class="col-sm-10">
-                    @project.Name
-                </dd>
-            }
-        }
-
         <div>
             <label for="project-select">Assigned Project/s</label>
         </div>
@@ -60,7 +41,7 @@ else
             <div class="d-md-flex">
                 <input type="search" id="project-select" class="form-control"
                        @bind-value="searchInput"
-                       @onkeypress="@EnterSearch" placeholder="Search Users" />
+                       @onkeypress="@EnterSearch" placeholder="Search Projects" />
                 <div class="btn btn-outline-primary" @onclick="HandleSearch">
                     <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
                 </div>
@@ -104,15 +85,16 @@ else
     {
         base.OnInitialized();
 
-        if (company.Projects != null)
-        {
-            assignedProjects = company.Projects;
-        }
-
         company = await Task.Run(() => CompanyService.GetCompanyAsync(Id));
         if (company == null)
         {
             displayMessage = "Company with Id: " + Id + " Not Found";
+        }
+
+
+        if (company.Projects != null)
+        {
+            assignedProjects = company.Projects;
         }
     }
 
@@ -160,12 +142,9 @@ else
 
     protected void UnassignProject(Guid id)
     {
-        if (projects != null)
-        {
-            Project projectToBeUnassigned = projects.Find((project) => project.Id == id);
-            if (assignedProjects.Contains(projectToBeUnassigned))
-                assignedProjects.Remove(projectToBeUnassigned);
-        }
+        Project projectToBeUnassigned = assignedProjects.Find((project) => project.Id == id);
+        if (assignedProjects.Contains(projectToBeUnassigned))
+            assignedProjects.Remove(projectToBeUnassigned);
     }
 
     private async Task UpdateCompany()

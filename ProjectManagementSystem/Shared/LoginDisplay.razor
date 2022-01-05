@@ -19,8 +19,15 @@
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
     </Authorized>
+
     <NotAuthorized>
-        <a href="Identity/Account/Register">Register</a>
         <a href="Identity/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+
+<!--show Register button only if an Admin user logs in -->
+@*<AuthorizeView Roles="Admin">
+    <Authorized>
+        <a href="Identity/Account/Register">Register</a>
+    </Authorized>
+</AuthorizeView>*@

@@ -46,21 +46,17 @@ else
         <dt class="col-sm-2">
             Assigned Users
         </dt>
-        @if (ticket.Users == null)
+        @if (ticket.Users != null && ticket.Users.Count != 0)
         {
             <dd class="col-sm-10">
-                <em>None</em>
+                <UsersTable Users="ticket.Users" />
             </dd>
         }
         else
         {
-            @foreach (var user in ticket.Users)
-            {
-                <dd class="col-sm-10">
-                    @user.FirstName
-                </dd>
-            }
-
+            <dd class="col-sm-10 text-black-50">
+                <em>None</em>
+            </dd>
         }
 
         @if (ticket.StartedOn != null)

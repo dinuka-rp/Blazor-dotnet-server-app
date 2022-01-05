@@ -75,7 +75,7 @@ else
         </dt>
         @if (project.Company == null)
         {
-            <dd class="col-sm-10">
+            <dd class="col-sm-10 text-black-50">
                 <em>Not Assigned</em>
             </dd>
         }
@@ -89,26 +89,23 @@ else
         <dt class="col-sm-2">
             Assigned Users
         </dt>
-        @if (project.Users == null || project.Users.Count == 0)
+        @if (project.Users != null && project.Users.Count != 0)
         {
             <dd class="col-sm-10">
-                <em>None</em>
+                <UsersTable Users="project.Users" />
             </dd>
         }
         else
         {
-            @if (project.Users != null)
-            {
-                <dd class="col-sm-10">
-                    <UsersTable Users="project.Users" />
-                </dd>
-            }
+            <dd class="col-sm-10 text-black-50">
+                <em>None</em>
+            </dd>
         }
 
         <dt class="col-sm-2">
             Tickets
         </dt>
-        @if (project.Tickets != null)
+        @if (project.Tickets != null && project.Tickets.Count != 0)
         {
             <dd class="col-sm-10">
                 <TicketsTable Tickets="project.Tickets" />
@@ -116,11 +113,10 @@ else
         }
         else
         {
-            <dd class="col-sm-10">
+            <dd class="col-sm-10 text-black-50">
                 <em>None</em>
             </dd>
         }
-
     </dl>
 
     <a class="btn btn-outline-secondary" href="projects/edit/@project.Id">

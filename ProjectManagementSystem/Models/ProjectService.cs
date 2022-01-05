@@ -41,7 +41,7 @@ namespace ProjectManagementSystem.Models
         {
             Project project = await _applicationDbContext.Projects
                 .Include(r => r.Company)
-                .Include(r => r.Tickets).ThenInclude(r=>r.Users)
+                .Include(r => r.Tickets).ThenInclude(rt=>rt.Users)
                 .Include(r => r.Users)
                 .FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return project;

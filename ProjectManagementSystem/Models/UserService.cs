@@ -38,8 +38,10 @@ namespace ProjectManagementSystem.Models
         #region Get List of Users with User Roles
         public async Task<List<ApplicationUser>> GetAllUsersWithRolesAsync()
         {
-            return await _applicationDbContext.Users.Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role).ToListAsync();
+            return await _applicationDbContext.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .ToListAsync();
         }
         #endregion
 
@@ -72,7 +74,10 @@ namespace ProjectManagementSystem.Models
         #region Get User by Id
         public async Task<ApplicationUser> GetUserAsync(String Id)
         {
-            ApplicationUser user = await _applicationDbContext.Users.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            ApplicationUser user = await _applicationDbContext.Users
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.Projects)
+                .FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return user;
         }
         #endregion

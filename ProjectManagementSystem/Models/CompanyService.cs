@@ -51,7 +51,9 @@ namespace ProjectManagementSystem.Models
         #region Get Company by Id
         public async Task<Company> GetCompanyAsync(Guid Id)
         {
-            Company company = await _applicationDbContext.Companies.Include(r => r.Projects).FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            Company company = await _applicationDbContext.Companies
+                .Include(r => r.Projects)
+                .FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return company;
         }
         #endregion

@@ -1,13 +1,19 @@
 ﻿@page "/admin"
 
 @attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager Navigation
 
-<h3>Admin Index</h3>
+<h3>Admin</h3>
 
 @* display projects table, mention route change in doc? *@
-<p>Display Projects table here?</p>
 
 @code {
-    // Redirect to admin/projects - this will be slower
+    protected override void OnInitialized()
+    {
+        // Redirect to admin/projects - this will be slower
+
+        // redirect to ProjectBoard
+
+        Navigation.NavigateTo("/projects");
+    }
 }
- 

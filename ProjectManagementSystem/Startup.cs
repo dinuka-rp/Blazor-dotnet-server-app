@@ -42,7 +42,6 @@ namespace ProjectManagementSystem
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<TicketService>();
             services.AddScoped<CompanyService>();
             services.AddScoped<UserService>();

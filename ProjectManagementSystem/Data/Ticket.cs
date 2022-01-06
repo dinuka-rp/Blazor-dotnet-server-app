@@ -31,7 +31,7 @@ namespace ProjectManagementSystem.Data
 
         public List<ApplicationUser> Users { get; set; }
 
-        [Required]
+        //[Required]
         public Project Project { get; set; }
     }
 }

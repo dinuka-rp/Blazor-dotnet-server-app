@@ -41,13 +41,8 @@ namespace ProjectManagementSystem.Models
         {
             if (ticket.Status == TicketStatus.InProgress)
             {
-                Ticket oldTicketInfo = await _applicationDbContext.Tickets.FirstOrDefaultAsync(c => c.Id.Equals(ticket.Id));
-
-                if (oldTicketInfo.StartedOn != null)
-                {
-                    // set this only if it hasn't been set before - because tickets can be reopened - the initial progress will be lost if not
-                    ticket.StartedOn = DateTime.UtcNow;
-                }
+                // in update, set this only if it hasn't been set before - because tickets can be reopened - the initial progress will be lost if not
+                ticket.StartedOn = DateTime.UtcNow;
             }
             else if (ticket.Status == TicketStatus.Done)
             {

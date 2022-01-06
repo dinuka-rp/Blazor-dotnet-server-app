@@ -135,14 +135,14 @@
 
     private async Task HandleSearch()
     {
-        users = await UserService.SearchUsersAsync(searchInput);
+        users = await UserService.SearchUsersByProjectAsync(searchInput, chosenProjectId);
         if (users.Count == 0)
         {
             displayUsersMessage = "No Users with the name: " + searchInput + " were found.";
         }
     }
 
-    private async Task ClearSearch()
+    private void ClearSearch()
     {
         searchInput = "";
         displayUsersMessage = "";

@@ -62,6 +62,40 @@ namespace ProjectManagementSystem.Models
         }
         #endregion
 
+        #region Get Users by Firstname/ Lastname/ Email/ Username Search
+        public async Task<List<ApplicationUser>> SearchUsersByProjectAsync(String searchTerm, Guid? projectId)
+        {
+            String trimmedSearchTerm = searchTerm.Trim().ToLower();
+
+            if (projectId != null)
+            {
+                Project project = await _applicationDbContext.Projects.FirstOrDefaultAsync(c => c.Id.Equals(projectId));
+
+                return await _applicationDbContext.Users.Where(c =>
+                c.Projects.Contains(project) &&
+                c.FirstName.ToLower().Contains(trimmedSearchTerm) ||
+                c.LastName.ToLower().Contains(trimmedSearchTerm) ||
+                c.Email.ToLower().Contains(trimmedSearchTerm) ||
+                c.UserName.ToLower().Contains(trimmedSearchTerm)
+                )
+                    .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                    .ToListAsync();
+            }
+            else {
+                return await _applicationDbContext.Users.Where(c =>
+                c.FirstName.ToLower().Contains(trimmedSearchTerm) ||
+                c.LastName.ToLower().Contains(trimmedSearchTerm) ||
+                c.Email.ToLower().Contains(trimmedSearchTerm) ||
+                c.UserName.ToLower().Contains(trimmedSearchTerm)
+                )
+                    .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                    .ToListAsync();
+            }
+        }
+        #endregion
+
         #region Insert User
         public async Task<bool> InsertUserAsync(ApplicationUser user)
         {

@@ -13,7 +13,6 @@ namespace ProjectManagementSystem.Data
         Admin,
     }
     //UserRole { get; set; }      // TODO: allow Admins to Edit this from Users view - by default, no user-role will be given
-    // change this directly in the database?
 
     public class ApplicationUser : IdentityUser
     {

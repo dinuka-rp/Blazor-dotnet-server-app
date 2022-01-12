@@ -42,12 +42,23 @@
             <label for="role-select" class="control-label">User Role</label>
             @*display assigned roles with deletable discs here? -- not required for now*@
 
-            @*TODO: test if this works properly with a new user *@
-            <InputSelect id="role-select" class="custom-select" @bind-Value="@user.UserRoles.First().RoleId">
-                <option value="@UserRoleEnum.Developer">Developer</option>
-                <option value="@UserRoleEnum.Admin">Admin</option>
-            </InputSelect>
-            @*<ValidationMessage For="@(()=>user.UserRoles.First().Role.Id)" />*@
+            @if (@user.UserRoles.Count != 0)
+            {
+                @*TODO: test if this works properly with a new user *@
+                <InputSelect id="role-select" class="custom-select" @bind-Value="@user.UserRoles.First().RoleId">
+                    <option value="@UserRoleEnum.Developer">Developer</option>
+                    <option value="@UserRoleEnum.Admin">Admin</option>
+                </InputSelect>
+                @*<ValidationMessage For="@(()=>user.UserRoles.First().Role.Id)" />*@
+            }
+            else
+            {
+                <InputSelect id="role-select" class="custom-select" @bind-Value="@firstUserRole">
+                    <option value="@UserRoleEnum.Developer">Developer</option>
+                    <option value="@UserRoleEnum.Admin">Admin</option>
+                </InputSelect>
+            }
+
         </div>
     }
 
@@ -102,6 +113,7 @@
 
     private ApplicationUser user { get; set; } = new();
     public String displayMessage = "Loading User Details";
+    private UserRoleEnum firstUserRole { get; set; } = UserRoleEnum.Developer;
 
     List<Project> projects;
     private List<Project> assignedProjects = new List<Project>();
@@ -178,6 +190,12 @@
     {
         if (assignedProjects != null && assignedProjects.Count > 0)
             user.Projects = assignedProjects;
+
+        //if(user.UserRoles.Count == 0)
+        //{
+        //    ApplicationUserRole appUserRole = new ApplicationUserRole(user.Id, firstUserRole);
+        //    user.UserRoles.Add(appUserRole);
+        //}
 
         await UserService.UpdateUserAsync(user);
         Navigation.NavigateTo("users");

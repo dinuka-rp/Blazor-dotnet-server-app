@@ -58,8 +58,9 @@ namespace ProjectManagementSystem.Models
         #region Get Ticket by Id
         public async Task<Ticket> GetTicketAsync(Guid Id)
         {
-            Ticket ticket = await _applicationDbContext.Tickets.Include(r => r.Project).Include(r => r.Users).FirstOrDefaultAsync(c => c.Id.Equals(Id));
-            return ticket;
+            Ticket ticket = await _applicationDbContext.Tickets.Include(r => r.Project)
+                .Include(r => r.Users).ThenInclude(u => u.UserRoles).ThenInclude(ur => ur.Role).FirstOrDefaultAsync(c => c.Id.Equals(Id));
+                return ticket;
         }
         #endregion
 

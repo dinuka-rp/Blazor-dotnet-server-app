@@ -45,7 +45,7 @@
             @if (@user.UserRoles.Count != 0)
             {
                 @*TODO: test if this works properly with a new user *@
-                <InputSelect id="role-select" class="custom-select" @bind-Value="@user.UserRoles.First().RoleId">
+                <InputSelect id="role-select" class="custom-select" @bind-Value="@firstUserRole">
                     <option value="@UserRoleEnum.Developer">Developer</option>
                     <option value="@UserRoleEnum.Admin">Admin</option>
                 </InputSelect>
@@ -136,6 +136,11 @@
         {
             assignedProjects = user.Projects;
         }
+
+        /*if (user.UserRoles != null)
+        {
+            firstUserRole = user.UserRoles.First().RoleId
+        }*/
     }
 
     private async Task EnterSearch(KeyboardEventArgs eventArgs)

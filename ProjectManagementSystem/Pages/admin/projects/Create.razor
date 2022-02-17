@@ -97,8 +97,8 @@
     List<Company> companies;
     private Guid chosenCompanyId;
 
-    private List<ApplicationUser> users { get; set; }
-    private List<ApplicationUser> assignedUsers { get; set; }
+    private List<ApplicationUser> users = new List<ApplicationUser>();
+    private List<ApplicationUser> assignedUsers = new List<ApplicationUser>();
 
     public String displayCompanyMessage = "Loading Companies";
     private String displayUsersMessage = "";

@@ -12,7 +12,7 @@ namespace ProjectManagementSystem.Data
         Developer,
         Admin,
     }
-    //UserRole { get; set; }      // TODO: allow Admins to Edit this from Users view - by default, no user-role will be given
+    // TODO: allow Admins to Edit this from Users view - by default, no user-role will be given
 
     public class ApplicationUser : IdentityUser
     {

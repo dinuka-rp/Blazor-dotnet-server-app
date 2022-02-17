@@ -54,6 +54,8 @@ namespace ProjectManagementSystem.Models
                 .Include(r => r.Company)
                 .Include(r => r.Tickets).ThenInclude(rt=>rt.Users)
                 .Include(r => r.Users)
+                .ThenInclude(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(c => c.Id.Equals(Id));
             return project;
         }

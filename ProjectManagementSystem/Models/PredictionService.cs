@@ -26,17 +26,20 @@ namespace ProjectManagementSystem.Models
 
             //Int32 daysDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0);
             //Int32 monthDiff = (Int32)Math.Round((predictionDate - DateTime.Now).TotalDays, 0) / 30;
-            DateTime pastDate = predictionDate.Subtract(predictionDate - DateTime.Now);
-
+            Int32 NumOfDaysDiff = (predictionDate - DateTime.Today).Days;
+            DateTime pastDate = DateTime.Today.AddDays(-NumOfDaysDiff);
+            
             // use LINQ - to get required details here
             // TODO: check if the logic to get the projects is correct here
-            List<Project> projectsInCurrentMonth = await _applicationDbContext.Projects.Where(project => project.CompletedOn == null &&
-                                                DateTime.Now > project.StartedOn).ToListAsync();
-            List<Project> projectsInPastNMonth = await _applicationDbContext.Projects.Where(project => pastDate < project.StartedOn &&
-                                                (pastDate < project.CompletedOn || project.CompletedOn == null)).ToListAsync();
+            List<Project> projectsInCurrentMonth = await _applicationDbContext.Projects
+                .Where(project => DateTime.Now > project.StartedOn &&
+                                project.CompletedOn == null ).ToListAsync();
+            List<Project> projectsInPastNMonth = await _applicationDbContext.Projects
+                .Where(project => pastDate > project.StartedOn &&
+                                !(pastDate > project.CompletedOn)).ToListAsync();
 
             // ---------------
-            HashSet<Company> companiesInCurrentMonth = new();
+            HashSet<Company> companiesInCurrentMonth = new();     // hashset does not allow duplicates
             foreach (var project in projectsInCurrentMonth)
             {
                 companiesInCurrentMonth.Add(project.Company);
@@ -75,18 +78,34 @@ namespace ProjectManagementSystem.Models
             HashSet<ApplicationUser> usersInCurrentMonth = new();
             foreach (var project in projectsInCurrentMonth)
             {
-                foreach (var user in project.Users)
+                if (project.Users != null)
                 {
-                    usersInCurrentMonth.Add(user);
+                    foreach (var user in project.Users)
+                    {
+                        usersInCurrentMonth.Add(user);
+                    }
+                }
+                else
+                {
+                    ApplicationUser dummyUser = new();
+                    usersInCurrentMonth.Add(dummyUser);
                 }
             }
 
             HashSet<ApplicationUser> usersInPastNMonth = new();
             foreach (var project in projectsInCurrentMonth)
             {
-                foreach (var user in project.Users)
+                if (project.Users != null)
                 {
-                    usersInPastNMonth.Add(user);
+                    foreach (var user in project.Users)
+                    {
+                        usersInPastNMonth.Add(user);
+                    }
+                }
+                else
+                {
+                    ApplicationUser dummyUser = new();
+                    usersInPastNMonth.Add(dummyUser);
                 }
             }
 
@@ -97,7 +116,12 @@ namespace ProjectManagementSystem.Models
             // prediction calculation
             Int32? peoplePerProjectPrediction;
 
-            Int32 predictedTotalUsers = usersInCurrentMonth.Count + expectedChangeInUsersPerProject;
+            Int32 predictedTotalUsers = usersInCurrentMonth.Count;
+
+            if (expectedChangeInUsersPerProject != usersInCurrentMonth.Count)
+            {
+                predictedTotalUsers = usersInCurrentMonth.Count + expectedChangeInUsersPerProject;
+            }
 
             if (predictedTotalProjects == 0)
             {

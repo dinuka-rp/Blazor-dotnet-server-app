@@ -26,9 +26,9 @@ namespace ProjectManagementSystem.Models
         {
             //use LINQ - to get required details here
             List<Ticket> tickets = await _applicationDbContext.Tickets.Where(ticket => startDate <= ticket.CompletedOn
-                                   && ticket.CompletedOn <= endDate).ToListAsync();
-            List<Project> projects = await _applicationDbContext.Projects.Where(ticket => startDate <= ticket.CompletedOn
-                                   && ticket.CompletedOn <= endDate).ToListAsync();
+                                   && ticket.CompletedOn <= endDate).Include(r => r.Users).ToListAsync();
+            List<Project> projects = await _applicationDbContext.Projects.Where(project => startDate <= project.CompletedOn
+                                   && project.CompletedOn <= endDate).ToListAsync();
             // limitation: time can't be truncanted in EF 5 (EF 6 is required https://docs.microsoft.com/en-us/dotnet/api/system.data.entity.dbfunctions.truncatetime?view=entity-framework-6.2.0)
 
             //create report from returned details
